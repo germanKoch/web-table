@@ -1,4 +1,4 @@
-package ru.bugprod.webtable.calculator.service;
+package ru.bugprod.webtable.calculator;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,15 +17,18 @@ import java.util.Map;
 
 public class ExpressionCalculator {
 
-    //TODO: аккуратнее int column или вouble column
-    public static void executeExpression(Table dataFrame, String expression) {
+    public static DoubleColumn executeExpression(Table dataFrame, String expression) {
         expression = expression.replace(" ", "");
         expression = expression.replace("-", "+-1*");
         expression = expression.replace("/", "*1/");
         expression = "(" + expression + ")";
 
         Map<String, DoubleColumn> intermediateResults = new HashMap<>();
-        while ((expression = processNestedExpr(expression, dataFrame, intermediateResults)) != null) ;
+        String exp;
+        while ((exp= processNestedExpr(expression, dataFrame, intermediateResults)) != null) {
+            expression = exp;
+        }
+        return intermediateResults.remove(expression);
     }
 
     private static String processNestedExpr(String expr, Table dataFrame, Map<String, DoubleColumn> intermediateResults) {
@@ -115,13 +118,4 @@ public class ExpressionCalculator {
         }
         return Pair.of(firstBracket, secondsBracket);
     }
-
-    public static void main(String[] args) {
-        DoubleColumn col1 = DoubleColumn.create("col1", 1, 2, 3);
-        DoubleColumn col2 = DoubleColumn.create("col2", 1, 2, 3);
-        var table = Table.create(col1, col2);
-        executeExpression(table, "((2*col1*col2 - col2)*col2) + col1*5.2/col2");
-    }
-
-
 }
