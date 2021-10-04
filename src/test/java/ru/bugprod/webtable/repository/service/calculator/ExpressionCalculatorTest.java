@@ -1,4 +1,4 @@
-package ru.bugprod.webtable.calculator;
+package ru.bugprod.webtable.repository.service.calculator;
 
 import org.junit.jupiter.api.Test;
 import tech.tablesaw.api.DoubleColumn;

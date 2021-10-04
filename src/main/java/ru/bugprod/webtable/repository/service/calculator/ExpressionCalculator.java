@@ -1,10 +1,10 @@
-package ru.bugprod.webtable.calculator;
+package ru.bugprod.webtable.repository.service.calculator;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import ru.bugprod.webtable.calculator.model.exception.IllegalExpressionException;
+import ru.bugprod.webtable.repository.service.calculator.model.exception.IllegalExpressionException;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.NumericColumn;
 import tech.tablesaw.api.Table;

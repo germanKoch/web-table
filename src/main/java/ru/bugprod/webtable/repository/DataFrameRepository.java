@@ -1,7 +1,7 @@
 package ru.bugprod.webtable.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.bugprod.webtable.calculator.ExpressionCalculator;
+import ru.bugprod.webtable.repository.service.calculator.ExpressionCalculator;
 import ru.bugprod.webtable.model.data.TableFragment;
 import ru.bugprod.webtable.model.exception.FileIOException;
 import ru.bugprod.webtable.model.exception.TableNotFoundException;
