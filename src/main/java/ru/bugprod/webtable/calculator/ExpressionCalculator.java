@@ -17,13 +17,13 @@ import java.util.Map;
 
 public class ExpressionCalculator {
 
-    public static DoubleColumn executeExpression(Table dataFrame, String expression) {
+    public static NumericColumn<?> executeExpression(Table dataFrame, String expression) {
         expression = expression.replace(" ", "");
         expression = expression.replace("-", "+-1*");
         expression = expression.replace("/", "*1/");
         expression = "(" + expression + ")";
 
-        Map<String, DoubleColumn> intermediateResults = new HashMap<>();
+        Map<String, NumericColumn<?>> intermediateResults = new HashMap<>();
         String exp;
         while ((exp= processNestedExpr(expression, dataFrame, intermediateResults)) != null) {
             expression = exp;
@@ -31,21 +31,21 @@ public class ExpressionCalculator {
         return intermediateResults.remove(expression);
     }
 
-    private static String processNestedExpr(String expr, Table dataFrame, Map<String, DoubleColumn> intermediateResults) {
+    private static String processNestedExpr(String expr, Table dataFrame, Map<String, NumericColumn<?>> intermediateResults) {
         Pair<Integer, Integer> indices = getBracketsIndices(expr);
         if (indices.getLeft().equals(indices.getRight()) && indices.getLeft().equals(-1)) {
             return null;
         }
         String targetExp = expr.substring(indices.getLeft() + 1, indices.getRight());
-        DoubleColumn result = calculateBracketEntry(targetExp, dataFrame, intermediateResults);
+        NumericColumn<?> result = calculateBracketEntry(targetExp, dataFrame, intermediateResults);
 
         String varName = getVarName(dataFrame, intermediateResults);
         intermediateResults.put(varName, result);
         return StringUtils.replaceOnce(expr, "(" + targetExp + ")", varName);
     }
 
-    private static DoubleColumn calculateBracketEntry(String expr, Table dataFrame, Map<String, DoubleColumn> intermediateResults) {
-        List<DoubleColumn> terms = new ArrayList<>();
+    private static NumericColumn<?> calculateBracketEntry(String expr, Table dataFrame, Map<String, NumericColumn<?>> intermediateResults) {
+        List<NumericColumn<?>> terms = new ArrayList<>();
 
         var segments = expr.split("\\+");
         for (var segment : segments) {
@@ -54,8 +54,8 @@ public class ExpressionCalculator {
         return terms.stream().reduce(NumberMapFunctions::add).orElseThrow();
     }
 
-    private static DoubleColumn calculateSegment(String expr, Table dataFrame, Map<String, DoubleColumn> intermediateResults) {
-        DoubleColumn result = DoubleColumn.create("result", dataFrame.rowCount()).fillWith(1);
+    private static NumericColumn<?> calculateSegment(String expr, Table dataFrame, Map<String, NumericColumn<?>> intermediateResults) {
+        NumericColumn<?> result = DoubleColumn.create("result", dataFrame.rowCount()).fillWith(1);
         var segments = expr.split("\\*");
         for (var segment : segments) {
             result = executeOperation(result, segment, dataFrame, intermediateResults);
@@ -63,12 +63,12 @@ public class ExpressionCalculator {
         return result;
     }
 
-    private static DoubleColumn executeOperation(DoubleColumn result,
+    private static NumericColumn<?> executeOperation(NumericColumn<?> result,
                                                  String segment,
                                                  Table dataFrame,
-                                                 Map<String, DoubleColumn> intermediateResults) {
+                                                 Map<String, NumericColumn<?>> intermediateResults) {
         boolean isDivide = segment.startsWith("1/");
-        DoubleColumn computedResult;
+        NumericColumn<?> computedResult;
         if (isDivide) {
             segment = segment.substring(2);
         }
@@ -85,15 +85,15 @@ public class ExpressionCalculator {
         return computedResult;
     }
 
-    private static DoubleColumn executeMultiplying(DoubleColumn first, NumericColumn<?> second, boolean isDivide) {
+    private static NumericColumn<?> executeMultiplying(NumericColumn<?> first, NumericColumn<?> second, boolean isDivide) {
         return !isDivide ? first.multiply(second) : first.divide(second);
     }
 
-    private static DoubleColumn executeMultiplying(DoubleColumn first, Number second, boolean isDivide) {
+    private static NumericColumn<?> executeMultiplying(NumericColumn<?> first, Number second, boolean isDivide) {
         return !isDivide ? first.multiply(second) : first.divide(second);
     }
 
-    private static String getVarName(Table dataFrame, Map<String, DoubleColumn> intermediateResults) {
+    private static String getVarName(Table dataFrame, Map<String, NumericColumn<?>> intermediateResults) {
         var varName = RandomStringUtils.randomAlphabetic(1);
         while (intermediateResults.containsKey(varName) || dataFrame.columnNames().contains(varName)) {
             varName = RandomStringUtils.randomAlphabetic(1);

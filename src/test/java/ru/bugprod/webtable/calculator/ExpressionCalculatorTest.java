@@ -9,7 +9,7 @@ public class ExpressionCalculatorTest {
     @Test
     public void baseTest() {
         DoubleColumn col1 = DoubleColumn.create("col1", 12, 27, 36, 234567, 34567183, 467831257, 12, 27, 36, 234567, 34567183, 467831257);
-        DoubleColumn col2 = DoubleColumn.create("col2", 1123, 213, 312312, 123, 567125671, 432461234, 1123, 213, 312312, 123, 567125671, 432461234);
+        DoubleColumn col2 = DoubleColumn.create("col2", 1123, 123, 213, 312312, 123, 567125671, 432461234, 1123, 213, 312312, 123, 567125671);
         DoubleColumn col3 = DoubleColumn.create("col3", 1123, 213, 3112, 112323, 6671, 4132434, 1123, 2213, 312, 1223, 571, 43234);
         var table = Table.create(col1, col2, col3);
         var result = ExpressionCalculator.executeExpression(table, "(col1 + col2)/col3 - (col1*col2)");
