@@ -6,5 +6,6 @@ import java.util.List;
 
 @Data
 public class TableFragment {
-    private final List<Column> columns;
+    private final String name;
+    private final List<TableColumn> columns;
 }

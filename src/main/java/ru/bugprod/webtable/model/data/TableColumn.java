@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Column {
+public class TableColumn {
     private final String key;
     private final List<?> values;
 }

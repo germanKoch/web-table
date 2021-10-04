@@ -14,7 +14,7 @@ public class ExpressionCalculatorTest {
         var table = Table.create(col1, col2, col3);
         var result = ExpressionCalculator.executeExpression(table, "(col1 + col2)/col3 - (col1*col2)");
         System.out.println(result.print());
-
+        System.out.println(result.name());
         System.out.println("TEST");
         for (int i = 0; i < col1.size(); i++) {
             var a1 = col1.get(i);
