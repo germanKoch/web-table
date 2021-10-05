@@ -1,13 +1,14 @@
 package ru.bugprod.webtable.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.bugprod.webtable.repository.service.calculator.ExpressionCalculator;
 import ru.bugprod.webtable.model.data.TableFragment;
 import ru.bugprod.webtable.model.exception.FileIOException;
 import ru.bugprod.webtable.model.exception.TableNotFoundException;
 import ru.bugprod.webtable.model.io.InputTableStreamHolder;
 import ru.bugprod.webtable.model.io.TableStreamHolder;
 import ru.bugprod.webtable.repository.mapper.TableFragmentMapper;
+import ru.bugprod.webtable.repository.service.calculator.ExpressionCalculator;
+import tech.tablesaw.api.BooleanColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.selection.Selection;
 
@@ -16,6 +17,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collector;
 
 @Repository
 public class DataFrameRepository {
@@ -52,12 +54,18 @@ public class DataFrameRepository {
         return new InputTableStreamHolder(in, name);
     }
 
-    public TableFragment getBetween(String key, int offset, int limit) {
+    public void removeByCondition(String key, String condition) {
         checkTable(key);
         var table = data.get(key);
-        var selection = Selection.withRange(offset, limit);
-        var tableFragment = table.where(selection);
-        return mapper.map(tableFragment);
+        var column = BooleanColumn.create("");
+        var result = table.stream()
+                .filter(row -> column.get(row.getRowNumber()))
+                .collect(Collector.of(
+                        () -> Table.create(table.name()),
+                        Table::addRow,
+                        Table::concat,
+                        Collector.Characteristics.UNORDERED));
+        data.put(key, result);
     }
 
     public void computeAndSave(String key, String columnName, String expr) {
@@ -66,6 +74,14 @@ public class DataFrameRepository {
         var result = ExpressionCalculator.executeExpression(table, expr);
         result.setName(columnName);
         table.addColumns(result);
+    }
+
+    public TableFragment getBetween(String key, int offset, int limit) {
+        checkTable(key);
+        var table = data.get(key);
+        var selection = Selection.withRange(offset, limit);
+        var tableFragment = table.where(selection);
+        return mapper.map(tableFragment);
     }
 
     private void checkTable(String key) {
