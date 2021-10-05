@@ -1,5 +1,6 @@
 package ru.bugprod.webtable.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -20,6 +21,7 @@ public class IOController {
 
     private final DataFrameRepository repository;
 
+    @ApiOperation(value = "Импортировать файл в формате csv.")
     @PostMapping("/import")
     public ResponseEntity<String> handleUpload(HttpServletRequest request) throws Exception {
         var upload = new ServletFileUpload();
@@ -33,7 +35,7 @@ public class IOController {
         return ResponseEntity.ok("Ok!");
     }
 
-
+    @ApiOperation(value = "Импортировать таблицу в формат csv.")
     @GetMapping(value = "/export")
     public void getFile(HttpServletResponse response) throws Exception {
         var holder = repository.exportData("1");
