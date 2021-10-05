@@ -1,0 +1,8 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  servlet:
+    multipart:
+      enabled: false
+      max-file-size: 1000000000
