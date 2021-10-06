@@ -26,9 +26,10 @@ public class IOController {
 
     private final DataFrameRepository repository;
 
-    @ApiOperation(value = "Импортировать файл в формате csv.", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PostMapping("/import")
-    public ResponseEntity<String> handleUpload(@RequestHeader String sessionKey, HttpServletRequest request) throws Exception {
+    @ApiOperation(value = "Импортировать файл в формате csv.")
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> handleUpload(@RequestHeader String sessionKey,
+                                               HttpServletRequest request) throws Exception {
         var upload = new ServletFileUpload();
         var iterStream = upload.getItemIterator(request);
         while (iterStream.hasNext()) {
@@ -41,9 +42,8 @@ public class IOController {
     }
 
     @ApiOperation(value = "Экспортировать таблицу в формат csv.",
-            produces = MediaType.TEXT_PLAIN_VALUE,
             responseHeaders = {@ResponseHeader(name = "Content-Disposition", description = "attachment; filename=Название_датасета")})
-    @GetMapping(value = "/export")
+    @GetMapping(value = "/export", produces = MediaType.TEXT_PLAIN_VALUE)
     public void getFile(@RequestHeader String sessionKey, HttpServletResponse response) throws Exception {
         var holder = repository.exportData(sessionKey);
         response.setContentType(MediaType.TEXT_PLAIN_VALUE);
