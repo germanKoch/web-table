@@ -1,6 +1,7 @@
 package ru.bugprod.webtable.controller;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ResponseHeader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class IOController {
     @ApiOperation(value = "Импортировать файл в формате csv.")
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> handleUpload(@RequestHeader String sessionKey,
-                                               HttpServletRequest request) throws Exception {
+                                               @ApiParam(value="File", required=true) HttpServletRequest request) throws Exception {
         var upload = new ServletFileUpload();
         var iterStream = upload.getItemIterator(request);
         while (iterStream.hasNext()) {
