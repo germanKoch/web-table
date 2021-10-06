@@ -6,13 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import ru.bugprod.webtable.repository.service.calculator.ExpressionCalculator;
 import ru.bugprod.webtable.repository.service.filter.model.exception.IllegalConditionException;
 import ru.bugprod.webtable.repository.service.util.VarNameFormer;
-import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.selection.Selection;
 
 import java.util.HashMap;
 
-// col1 > col2*col3 & col2 <= 2
 //TODO: поддержать скобочки
 //TODO: сделать правильную последвоательность операций
 public class ConditionExpressionCalculator {
@@ -87,13 +85,4 @@ public class ConditionExpressionCalculator {
             default: throw new IllegalConditionException("Condition can not be parsed");
         }
     }
-
-    public static void main(String[] args) {
-        var col1 = DoubleColumn.create("a", 1, 2, 3);
-        var col2 = DoubleColumn.create("b", 3, 4, 5);
-        var col3 = DoubleColumn.create("c", 3, 4, 5);
-        var table = Table.create(col1, col2, col3);
-        getCondition(table, "a*2 > 2 & b > a | 3*(c*b + 1) <= a");
-    }
-
 }

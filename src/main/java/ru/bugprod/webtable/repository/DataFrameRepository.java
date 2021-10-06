@@ -8,6 +8,7 @@ import ru.bugprod.webtable.model.io.InputTableStreamHolder;
 import ru.bugprod.webtable.model.io.TableStreamHolder;
 import ru.bugprod.webtable.repository.mapper.TableFragmentMapper;
 import ru.bugprod.webtable.repository.service.calculator.ExpressionCalculator;
+import ru.bugprod.webtable.repository.service.filter.ConditionExpressionCalculator;
 import tech.tablesaw.api.BooleanColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.selection.Selection;
@@ -54,18 +55,21 @@ public class DataFrameRepository {
         return new InputTableStreamHolder(in, name);
     }
 
-    public void removeByCondition(String key, String condition) {
+    public TableFragment getBetween(String key, int offset, int limit) {
         checkTable(key);
         var table = data.get(key);
-        var column = BooleanColumn.create("");
-        var result = table.stream()
-                .filter(row -> column.get(row.getRowNumber()))
-                .collect(Collector.of(
-                        () -> Table.create(table.name()),
-                        Table::addRow,
-                        Table::concat,
-                        Collector.Characteristics.UNORDERED));
-        data.put(key, result);
+        var maxRange = Math.min(offset + limit, table.rowCount());
+        var selection = Selection.withRange(offset, maxRange);
+        var tableFragment = table.where(selection);
+        return mapper.map(tableFragment);
+    }
+
+    public void filterByCondition(String key, String condition) {
+        checkTable(key);
+        var table = data.get(key);
+        var selection = ConditionExpressionCalculator.getCondition(table, condition);
+        var tableFragment = table.where(selection);
+        data.put(key, tableFragment);
     }
 
     public void computeAndSave(String key, String columnName, String expr) {
@@ -74,14 +78,6 @@ public class DataFrameRepository {
         var result = ExpressionCalculator.executeExpression(table, expr);
         result.setName(columnName);
         table.addColumns(result);
-    }
-
-    public TableFragment getBetween(String key, int offset, int limit) {
-        checkTable(key);
-        var table = data.get(key);
-        var selection = Selection.withRange(offset, limit);
-        var tableFragment = table.where(selection);
-        return mapper.map(tableFragment);
     }
 
     private void checkTable(String key) {
