@@ -6,9 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.bugprod.webtable.controller.requests.ComputeRequest;
+import ru.bugprod.webtable.controller.requests.FilterRequest;
 import ru.bugprod.webtable.model.data.TableFragment;
 import ru.bugprod.webtable.usecase.OperationUseCase;
 
@@ -29,8 +32,8 @@ public class TableRestController {
     @ApiOperation(value = "Получение фрагмента датасета")
     @GetMapping("/get-fragment")
     public TableFragment getFragment(@RequestHeader String sessionKey,
-                                       @ApiParam("Смещение от начала") @RequestParam int offset,
-                                       @ApiParam("Количество элементов") @RequestParam int limit) {
+                                     @ApiParam("Смещение от начала") @RequestParam int offset,
+                                     @ApiParam("Количество элементов") @RequestParam int limit) {
         log.debug("getFragment(sessionKey={}, offset={}, limit={})", sessionKey, offset, limit);
         return useCase.getBetween(sessionKey, offset, limit);
     }
@@ -39,17 +42,16 @@ public class TableRestController {
     @ApiOperation(value = "Расчёт новой фичи")
     @PostMapping("/compute-column")
     public TableFragment computeColumn(@RequestHeader String sessionKey,
-                                       @ApiParam("Название новой колонки") @RequestParam String columnName,
-                                       @ApiParam("Выражение для расчёта колонки") @RequestParam String expression) {
-        log.debug("computeColumn(sessionKey={}, columnName={}, expression={})", sessionKey, columnName, expression);
-        return useCase.computeAndSave(sessionKey, columnName, expression);
+                                       @ApiParam("Запрос") @RequestBody ComputeRequest request) {
+        log.debug("computeColumn(sessionKey={}, request={})", sessionKey, request);
+        return useCase.computeAndSave(sessionKey, request.getColumnName(), request.getExpression());
     }
 
     @ApiOperation(value = "Отфильтровать строки")
     @PostMapping("/filter-rows")
     public TableFragment filterRows(@RequestHeader String sessionKey,
-                                    @ApiParam("Выражение фильтрации") @RequestParam String expression) {
-        log.debug("filterRows(sessionKey={}, expression={})", sessionKey, expression);
-        return useCase.filterByCondition(sessionKey, expression);
+                                    @ApiParam("Выражение фильтрации") @RequestBody FilterRequest request) {
+        log.debug("filterRows(sessionKey={}, expression={})", sessionKey, request.getExpression());
+        return useCase.filterByCondition(sessionKey, request.getExpression());
     }
 }

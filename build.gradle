@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.session:spring-session-core'
+    implementation 'commons-validator:commons-validator:1.6'
     implementation 'commons-fileupload:commons-fileupload:1.4'
     implementation 'org.apache.commons:commons-lang3:3.8.1'
     implementation 'tech.tablesaw:tablesaw-core:0.38.5'

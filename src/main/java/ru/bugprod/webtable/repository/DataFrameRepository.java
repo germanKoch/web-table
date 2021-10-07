@@ -9,17 +9,23 @@ import ru.bugprod.webtable.model.io.TableStreamHolder;
 import ru.bugprod.webtable.repository.mapper.TableFragmentMapper;
 import ru.bugprod.webtable.repository.service.calculator.ExpressionCalculator;
 import ru.bugprod.webtable.repository.service.filter.ConditionExpressionCalculator;
+import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.io.csv.CsvReadOptions;
 import tech.tablesaw.selection.Selection;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 @Repository
 public class DataFrameRepository {
+
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
     private final Map<String, Table> data;
     private final TableFragmentMapper mapper = TableFragmentMapper.INSTANCE;
@@ -30,7 +36,14 @@ public class DataFrameRepository {
 
     public void importData(String key, TableStreamHolder tableStreamHolder) {
         try (var stream = tableStreamHolder.openStream()) {
-            var table = Table.read().csv(stream, tableStreamHolder.getTableName());
+            var table = Table.read()
+                    .csv(CsvReadOptions
+                            .builder(stream)
+                            .tableName(tableStreamHolder.getTableName())
+                            .dateFormat(DateTimeFormatter.ofPattern(DATE_FORMAT))
+                            .dateTimeFormat(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT))
+                            .build()
+                    );
             table.columns().forEach(column -> column.setName(changeColumnName(column.name())));
             data.put(key, table);
         } catch (IOException e) {
@@ -86,6 +99,9 @@ public class DataFrameRepository {
     }
 
     private String changeColumnName(String name) {
-        return name.split(" ")[0];
+        return name
+                .split(" ")[0]
+                .toLowerCase()
+                .replaceAll("[^a-z1-9]", "_");
     }
 }
