@@ -9,7 +9,6 @@ import ru.bugprod.webtable.model.io.TableStreamHolder;
 import ru.bugprod.webtable.repository.mapper.TableFragmentMapper;
 import ru.bugprod.webtable.repository.service.calculator.ExpressionCalculator;
 import ru.bugprod.webtable.repository.service.filter.ConditionExpressionCalculator;
-import tech.tablesaw.api.BooleanColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.selection.Selection;
 
@@ -18,7 +17,6 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collector;
 
 @Repository
 public class DataFrameRepository {
@@ -33,6 +31,7 @@ public class DataFrameRepository {
     public void importData(String key, TableStreamHolder tableStreamHolder) {
         try (var stream = tableStreamHolder.openStream()) {
             var table = Table.read().csv(stream, tableStreamHolder.getTableName());
+            table.columns().forEach(column -> column.setName(changeColumnName(column.name())));
             data.put(key, table);
         } catch (IOException e) {
             throw new FileIOException(e.getMessage(), e);
@@ -64,14 +63,6 @@ public class DataFrameRepository {
         return mapper.map(tableFragment);
     }
 
-    public void filterByCondition(String key, String condition) {
-        checkTable(key);
-        var table = data.get(key);
-        var selection = ConditionExpressionCalculator.getCondition(table, condition);
-        var tableFragment = table.where(selection);
-        data.put(key, tableFragment);
-    }
-
     public void computeAndSave(String key, String columnName, String expr) {
         checkTable(key);
         var table = data.get(key);
@@ -80,9 +71,21 @@ public class DataFrameRepository {
         table.addColumns(result);
     }
 
+    public void filterByCondition(String key, String condition) {
+        checkTable(key);
+        var table = data.get(key);
+        var selection = ConditionExpressionCalculator.getCondition(table, condition);
+        var tableFragment = table.where(selection);
+        data.put(key, tableFragment);
+    }
+
     private void checkTable(String key) {
         if (!data.containsKey(key)) {
             throw new TableNotFoundException("Table not found");
         }
+    }
+
+    private String changeColumnName(String name) {
+        return name.split(" ")[0];
     }
 }

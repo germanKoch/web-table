@@ -30,7 +30,7 @@ public class IOController {
     @ApiOperation(value = "Импортировать файл в формате csv.")
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> handleUpload(@RequestHeader String sessionKey,
-                                               @ApiParam(value="File", required=true) HttpServletRequest request) throws Exception {
+                                               @ApiParam(value = "File") HttpServletRequest request) throws Exception {
         var upload = new ServletFileUpload();
         var iterStream = upload.getItemIterator(request);
         while (iterStream.hasNext()) {

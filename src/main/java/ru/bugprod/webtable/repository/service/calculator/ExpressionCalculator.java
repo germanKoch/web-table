@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO: поддержать степени
 public class ExpressionCalculator {
 
     public static NumericColumn<?> executeExpression(Table dataFrame, String expression) {
