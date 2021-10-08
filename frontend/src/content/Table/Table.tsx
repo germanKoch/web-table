@@ -1,5 +1,7 @@
-import { Table, Button, Space } from "antd";
+import { Table, Button, Space, Input } from "antd";
+import SearchOutlined from "@ant-design/icons/SearchOutlined";
 import React from "react";
+import { getColumnSearchProps } from "./columnSearchProp";
 
 const data = [
     {
@@ -17,7 +19,7 @@ const data = [
     {
         key: "3",
         name: "Joe Black",
-        age: 32,
+        age: "32",
         address: "Sidney No. 1 Lake Park",
     },
     {
@@ -64,16 +66,10 @@ export class MainTable extends React.Component {
 
     render() {
         let { sortedInfo, filteredInfo } = this.state;
-        // @ts-ignore
+
         sortedInfo = sortedInfo || {};
-        // @ts-ignore
         filteredInfo = filteredInfo || {};
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
+
         const columns = [
             {
                 title: "Name",
@@ -93,6 +89,8 @@ export class MainTable extends React.Component {
                 title: "Age",
                 dataIndex: "age",
                 key: "age",
+                ...getColumnSearchProps("age"),
+                filteredValue: filteredInfo.age || null,
                 sorter: (a: { age: number }, b: { age: number }) => a.age - b.age,
                 sortOrder: sortedInfo.columnKey === "age" && sortedInfo.order,
                 ellipsis: true,
