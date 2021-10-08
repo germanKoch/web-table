@@ -1,4 +1,4 @@
-import { Layout, Menu } from 'antd';
+import {Layout, Menu, Table} from 'antd';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import { Filter } from "./content/Filter";
@@ -9,7 +9,73 @@ import "./App.css";
 
 const {Header, Content, Footer, Sider} = Layout;
 
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+  },
+  {
+    title: 'Chinese Score',
+    dataIndex: 'chinese',
+    sorter: {
+      compare: (a: { chinese: number; }, b: { chinese: number; }) => a.chinese - b.chinese,
+      multiple: 3,
+    },
+  },
+  {
+    title: 'Math Score',
+    dataIndex: 'math',
+    sorter: {
+      compare: (a: { math: number; }, b: { math: number; }) => a.math - b.math,
+      multiple: 2,
+    },
+  },
+  {
+    title: 'English Score',
+    dataIndex: 'english',
+    sorter: {
+      compare: (a: { english: number; }, b: { english: number; }) => a.english - b.english,
+      multiple: 1,
+    },
+  },
+];
+
+const data = [
+  {
+    key: '1',
+    name: 'John Brown',
+    chinese: 98,
+    math: 60,
+    english: 70,
+  },
+  {
+    key: '2',
+    name: 'Jim Green',
+    chinese: 98,
+    math: 66,
+    english: 89,
+  },
+  {
+    key: '3',
+    name: 'Joe Black',
+    chinese: 98,
+    math: 90,
+    english: 70,
+  },
+  {
+    key: '4',
+    name: 'Jim Red',
+    chinese: 88,
+    math: 99,
+    english: 89,
+  },
+];
+
 function App() {
+
+  function onChange(pagination: any, filters: any, sorter: any, extra: any) {
+    console.log('params', pagination, filters, sorter, extra);
+  }
 
   return (
       <Router>
@@ -41,7 +107,7 @@ function App() {
             <Header style={{padding: 0}}/>
             <Content style={{margin: '24px 16px 0'}}>
               <div className="site-layout-background" style={{padding: 24, minHeight: 360}}>
-                Хеловорлд
+                <Table columns={columns} dataSource={data} onChange={onChange} />
                 <Route path="/filter">
                   <Filter/>
                 </Route>
