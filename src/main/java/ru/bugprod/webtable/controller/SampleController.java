@@ -18,7 +18,7 @@ public class SampleController {
 
     private final SampleRepository repository;
 
-    @ApiOperation(value = "Получение сэмплов всех сэмлов")
+    @ApiOperation(value = "Получение всех сэмлов")
     @GetMapping("/get-all-samples")
     public List<Sample> getAllSamples(@RequestHeader String sessionKey) {
         return repository.getAllSamples();
