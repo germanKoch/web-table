@@ -26,7 +26,7 @@ public class TableRestController {
     private final MetadataUseCase useCase;
     private final OperationUseCase operationUseCase;
 
-    @ApiOperation(value = "Получение фрагмента датасета")
+    @ApiOperation(value = "Получение всех метаданных")
     @GetMapping("/get-all-metadata")
     public List<DatasetMetadata> getAllMetadata(@RequestHeader String sessionKey) {
         return useCase.getAllMetadata(sessionKey);
