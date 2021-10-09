@@ -11,7 +11,7 @@ import ru.bugprod.webtable.usecase.MetadataUseCase;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RestController
+@RestController("/api")
 @Slf4j
 public class TableRestController {
 

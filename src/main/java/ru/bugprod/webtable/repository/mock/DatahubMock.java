@@ -43,6 +43,16 @@ public class DatahubMock {
                         )
                 ), "record", "SampleHdfsDataset", "com.linkedin.dataset", "Sample Hdfs dataset"
         ));
+        data.add(new TableMetadata(
+                List.of(
+                        new Field("user_name", "string"),
+                        new Field("timestamp", "number"),
+                        new Field("user_id", "string"),
+                        new Field("browser_id", "string"),
+                        new Field("session_id", "string"),
+                        new Field("deletion_reason", "string")
+                ), "record", "fct_users_deleted","com.linkedin.dataset","Sample users dataset"
+        ));
     }
 
 
