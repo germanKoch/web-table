@@ -84,13 +84,11 @@ function App() {
                 </Header>
                 <Content style={{margin: "24px 16px 0"}}>
                     <div className="site-layout-background" style={{padding: 24, minHeight: 360 }}>
-                        {/* <Table columns={columns} dataSource={data} onChange={onChange} /> */}
-                        {/* <MainTable/> */}
+                         <MainTable/>
                         <Graph />
                     </div>
                 </Content>
                 <Footer style={{textAlign: "center"}}>Багетный прод © 2021</Footer>
-                <Footer style={{ textAlign: "center" }}>© 2021</Footer>
             </Layout>
         </Router>
     );
