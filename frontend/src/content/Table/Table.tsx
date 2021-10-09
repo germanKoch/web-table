@@ -1,7 +1,7 @@
-import { Button, Space, Table } from "antd";
+import { Button, Space, Table, Tree } from "antd";
 import React from "react";
 import { MetaData } from "./model";
-
+const { TreeNode } = Tree
 
 export class MainTable extends React.Component {
     state: { filteredInfo: any; sortedInfo: any; metadata: any } = {
@@ -110,9 +110,29 @@ export class MainTable extends React.Component {
         });
     };
 
+
     render() {
         let {sortedInfo, filteredInfo} = this.state;
+        const onSelect = (keys: any, info: any) => {
+            console.log('Trigger Select', keys, info);
+        };
 
+        const onExpand = () => {
+            console.log('Trigger Expand');
+        };
+
+        const renderTreeNodes = (data:any) =>
+            data.map((item: any, index: number) => {
+                if (item.fields) {
+                    console.log(item)
+                    return (
+                        <TreeNode title={item.name} isLeaf={item.fields.length == 0} key={index}>
+                            {renderTreeNodes(item.fields)}
+                        </TreeNode>
+                    )
+                }
+                return <TreeNode key={item.key} {...item} />
+            })
         const columns: any = [
             {
                 title: "Item 1  ",
@@ -163,13 +183,18 @@ export class MainTable extends React.Component {
             },
             {
                 title: "fields",
-                dataIndex: "fields['name']",
-                key: "fields['name']",
+                dataIndex: "fields",
+                key: "fields",
                 ellipsis: true,
                 render: (fields: any) => {
-                    console.log(fields)
-                    return fields;
-                }
+                    return (
+                        <React.Fragment>
+                            <Tree>
+                                {renderTreeNodes(fields)}
+                            </Tree>
+                        </React.Fragment>
+                    );
+                },
             },
         ];
         return (
