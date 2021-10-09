@@ -9,6 +9,7 @@ import ru.bugprod.webtable.model.metadata.DatasetMetadata;
 import ru.bugprod.webtable.model.metadata.Field;
 import ru.bugprod.webtable.model.metadata.Struct;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -69,6 +70,24 @@ public class DatahubMock {
                         )
                 ), "record", "SampleHdfsDataset", "com.linkedin.dataset", "Sample Hdfs dataset"
         ));
+        data.put("SampleHdfsDataset", new Sample("SampleHdfsDataset", getList(
+                new Row(getList(
+                        new Value("shipment_info", Map.of("date", LocalDate.now(), "target", "test1", "destination", "city1")),
+                        new Value("route_data",  Map.of("lat", 1001, "lng", 2001))
+                )),
+                new Row(getList(
+                        new Value("shipment_info",  Map.of("date", LocalDate.now(), "target", "test2", "destination", "city3")),
+                        new Value("route_data",  Map.of("lat", 1002, "lng", 2002))
+                )),
+                new Row(getList(
+                        new Value("shipment_info",  Map.of("date", LocalDate.now(), "target", "test3", "destination", "city4")),
+                        new Value("route_data",  Map.of("lat", 1003, "lng", 2003))
+                )),
+                new Row(getList(
+                        new Value("shipment_info",  Map.of("date", LocalDate.now(), "target", "test1", "destination", "city1")),
+                        new Value("route_data",  Map.of("lat", 1004, "lng", 2004))
+                ))
+        )));
 
 
         metadata.add(new DatasetMetadata(
