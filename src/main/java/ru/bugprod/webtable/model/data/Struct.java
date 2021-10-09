@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("Поле-структура")
-public class Struct extends Field {
+public class Struct extends Field implements FieldContainer {
     @ApiModelProperty("Вложенные поля")
     private List<Field> fields;
 
