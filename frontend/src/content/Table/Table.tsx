@@ -30,7 +30,7 @@ const data = [
 ];
 
 export class MainTable extends React.Component {
-    state: { filteredInfo: any; sortedInfo: any } = {
+    state: { filteredInfo: any; sortedInfo: any; metadata: any } = {
         filteredInfo: {
             age: null,
             name: null
@@ -39,7 +39,38 @@ export class MainTable extends React.Component {
             columnKey: null,
             order: null
         },
+        metadata: {
+            error: null,
+            isLoaded: false,
+            items: []
+        }
     };
+
+    constructor(props: any) {
+        super(props);
+    }
+
+    componentDidMount() {
+        fetch("https://bugprod-webtable.herokuapp.com/get-all-metadata")
+            .then((res: Response) => {
+                return res.json();
+            })
+            .then(
+                (result) => {
+                    console.log('result=>', result)
+                    this.setState({
+                        isLoaded: true,
+                        items: result.items
+                    });
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            )
+    }
 
     handleChange = (pagination: any, filters: any, sorter: any) => {
         console.log("Various parameters", pagination, filters, sorter);
@@ -81,7 +112,7 @@ export class MainTable extends React.Component {
     };
 
     render() {
-        let { sortedInfo, filteredInfo } = this.state;
+        let {sortedInfo, filteredInfo} = this.state;
 
         const columns: any = [
             {
@@ -126,12 +157,12 @@ export class MainTable extends React.Component {
         ];
         return (
             <React.Fragment>
-                <Space style={{ marginBottom: 16 }}>
+                <Space style={{marginBottom: 16}}>
                     <Button onClick={this.setAgeSort}>Sort age</Button>
                     <Button onClick={this.clearFilters}>Clear filters</Button>
                     <Button onClick={this.clearAll}>Clear filters and sorters</Button>
                 </Space>
-                <Table columns={columns} dataSource={data} onChange={this.handleChange} />
+                <Table columns={columns} dataSource={data} onChange={this.handleChange}/>
             </React.Fragment>
         );
     }
