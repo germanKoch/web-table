@@ -13,6 +13,7 @@ import ru.bugprod.webtable.controller.request.AddFieldRequest;
 import ru.bugprod.webtable.controller.request.FilterRequest;
 import ru.bugprod.webtable.controller.request.JoinRequest;
 import ru.bugprod.webtable.model.metadata.DatasetMetadata;
+import ru.bugprod.webtable.usecase.DataHubUseCase;
 import ru.bugprod.webtable.usecase.MetadataUseCase;
 import ru.bugprod.webtable.usecase.OperationUseCase;
 
@@ -25,6 +26,7 @@ public class TableRestController {
 
     private final MetadataUseCase useCase;
     private final OperationUseCase operationUseCase;
+    private final DataHubUseCase dataHubUseCase;
 
     @ApiOperation(value = "Получение всех метаданных")
     @GetMapping("/get-all-metadata")
@@ -49,5 +51,11 @@ public class TableRestController {
     public ResponseEntity<String> addField(@RequestHeader String sessionKey, @RequestBody FilterRequest request) {
         operationUseCase.filter(sessionKey, request);
         return ResponseEntity.ok("filterred request saved");
+    }
+
+    @ApiOperation(value = "Получение всех метаданных из datahub")
+    @GetMapping("/get-all-metadata-datahub")
+    public String getAllMetadataDataHub() {
+        return dataHubUseCase.getData();
     }
 }
