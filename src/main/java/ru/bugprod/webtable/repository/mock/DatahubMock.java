@@ -11,6 +11,7 @@ import ru.bugprod.webtable.model.metadata.Struct;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -203,7 +204,24 @@ public class DatahubMock {
                         )
                 ), "record", "LogSample", "com.linkedin.dataset", "LogSample dataset"
         ));
-
+        data.put("LogSample", new Sample("LogSample", getList(
+                new Row(getList(
+                        new Value("level", "error"),
+                        new Value("coordinates", Map.of("class", "ru.bugprod.webtable.ObjectMapper", "string_number", 1, "date", LocalDateTime.now()))
+                )),
+                new Row(getList(
+                        new Value("level", "info"),
+                        new Value("coordinates", Map.of("class", "ru.bugprod.webtable.WebTable", "string_number", 20, "date", LocalDateTime.now()))
+                )),
+                new Row(getList(
+                        new Value("level", "debug"),
+                        new Value("coordinates", Map.of("class", "ru.bugprod.webtable.OloloClass", "string_number", 837, "date", LocalDateTime.now()))
+                )),
+                new Row(getList(
+                        new Value("level", "info"),
+                        new Value("coordinates", Map.of("class", "ru.bugprod.webtable.OrdClass", "string_number", 5, "date", LocalDateTime.now()))
+                ))
+        )));
 
         metadata.add(new DatasetMetadata(
                 getList(
@@ -222,7 +240,28 @@ public class DatahubMock {
                         )
                 ), "record", "CountriesDataset", "com.linkedin.dataset", "CountriesDataset dataset"
         ));
-
+        data.put("CountriesDataset", new Sample("CountriesDataset", getList(
+                new Row(getList(
+                        new Value("name", "UK"),
+                        new Value("population", 1234622213),
+                        new Value("capital", Map.of("name", "London", "coordinates", Map.of("lat", 12139, "lng", 212312)))
+                )),
+                new Row(getList(
+                        new Value("name", "China"),
+                        new Value("population", 2132142141),
+                        new Value("capital", Map.of("name", "Pekin", "coordinates", Map.of("lat", 11235678, "lng", 21231)))
+                )),
+                new Row(getList(
+                        new Value("name", "USA"),
+                        new Value("population", 456712456),
+                        new Value("capital", Map.of("name", "Vashington", "coordinates", Map.of("lat", 1456712, "lng", 2567312)))
+                )),
+                new Row(getList(
+                        new Value("name", "Russia"),
+                        new Value("population", 1440000),
+                        new Value("capital", Map.of("name", "Moscow", "coordinates", Map.of("lat", 1456782, "lng", 24567123)))
+                ))
+        )));
 
     }
 
