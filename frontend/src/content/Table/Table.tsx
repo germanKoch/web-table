@@ -50,13 +50,24 @@ export class MainTable extends React.Component {
     };
 
     clearFilters = () => {
-        this.setState({ filteredInfo: null });
+        this.setState({
+            filteredInfo: {
+                age: null,
+                name: null
+            }
+        });
     };
 
     clearAll = () => {
         this.setState({
-            filteredInfo: null,
-            sortedInfo: null,
+            filteredInfo: {
+                age: null,
+                name: null
+            },
+            sortedInfo: {
+                columnKey: null,
+                order: null
+            },
         });
     };
 
