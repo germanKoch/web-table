@@ -1,4 +1,4 @@
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 import { useEffect, useState } from "react";
 import { Graph } from "./Graph/Graph";
 import { getChilds } from "./Graph/utils/getChilds";
@@ -8,6 +8,34 @@ const FeatureComponent = () => {
     const [state, setState] = useState({
         data: null,
     });
+
+    function downloadData() {
+        fetch("https://bugprod-webtable.herokuapp.com/export", {
+            headers: {
+                "Content-Type": "application/json",
+                sessionKey: "test",
+            },
+        })
+            .then((res: Response) => {
+                return res.json();
+            })
+            .then(
+                (result) => {
+                    donwloadJson(result);
+                    console.log("result=>", result);
+                },
+                (error) => {}
+            );
+    }
+
+    function donwloadJson(storageObj) {
+        console.log(storageObj);
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storageObj));
+        var dlAnchorElem = document.createElement("a");
+        dlAnchorElem.setAttribute("href", dataStr);
+        dlAnchorElem.setAttribute("download", "schema.json");
+        dlAnchorElem.click();
+    }
 
     function fetchData() {
         fetch("https://bugprod-webtable.herokuapp.com/get-all-metadata", {
@@ -47,7 +75,13 @@ const FeatureComponent = () => {
     return (
         <Row className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
             <Col xl={24}>
-                <Join onJoin={(e) => fetchData()} data={state.data} />
+                <div style={{ display: "flex", alignItems: "end", marginBottom: "20px" }}>
+                    <Join onJoin={(e) => fetchData()} data={state.data} />
+                    <Button type="primary" style={{ marginLeft: "20px" }} onClick={downloadData}>
+                        Выгрузить
+                    </Button>
+                </div>
+
                 <Graph data={state.data} />
             </Col>
         </Row>

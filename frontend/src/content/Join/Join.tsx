@@ -77,7 +77,6 @@ export class Join extends React.Component {
             <div
                 style={{
                     width: "400px",
-                    marginBottom: "20px",
                     boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
                     padding: "20px",
                     background: "white",
