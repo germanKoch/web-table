@@ -13,6 +13,8 @@ import ru.bugprod.webtable.model.data.Struct;
 import ru.bugprod.webtable.model.exception.FieldNotFoundException;
 import ru.bugprod.webtable.model.exception.OperationException;
 import ru.bugprod.webtable.repository.MetadataRepository;
+import ru.bugprod.webtable.repository.OperationRepository;
+import ru.bugprod.webtable.repository.entity.OperationType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +22,10 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-//TODO: сохранение
 public class OperationUseCase {
 
     private final MetadataRepository repo;
+    private final OperationRepository opRepo;
 
     public DatasetMetadata join(String sessionKey, JoinRequest request) {
         var metadata = repo.getAllMetadata(sessionKey);
@@ -31,11 +33,12 @@ public class OperationUseCase {
         var datasetFrom = getDataset(metadata, request.getJoinDataset());
         var fieldTo = getField(datasetTo, request.getField());
         var fieldFrom = getField(datasetFrom, request.getJoinField());
-
         if (!fieldTo.getType().equals(fieldFrom.getType())) {
             throw new OperationException();
         }
         joinDatasets(datasetTo, datasetFrom);
+
+        opRepo.saveOperation(sessionKey, request, OperationType.JOIN);
         return datasetTo;
     }
 
@@ -44,11 +47,13 @@ public class OperationUseCase {
         var metadata = repo.getAllMetadata(sessionKey);
         var dataset = getDataset(metadata, request.getDataset());
         addNewField(dataset, request.getNewFieldName(), request.getNewFieldType());
+
+        opRepo.saveOperation(sessionKey, request, OperationType.COMPUTE_FIELD);
         return dataset;
     }
 
     public void filter(String sessionKey, FilterRequest request) {
-        //TODO: валидация экспрешина фильтрации
+        opRepo.saveOperation(sessionKey, request, OperationType.FILTER);
     }
 
     private DatasetMetadata getDataset(List<DatasetMetadata> datasets, String name) {
@@ -79,13 +84,13 @@ public class OperationUseCase {
         var path = fieldPath.split("\\.");
         FieldContainer fieldContainer = dataset;
 
-        for (int i = 0; i < path.length; i++) {
+        for (var i = 0; i < path.length; i++) {
             try {
-                Field field = getFieldPlain(fieldContainer, path[i]);
+                var field = getFieldPlain(fieldContainer, path[i]);
                 if (field instanceof FieldContainer) {
                     fieldContainer = (FieldContainer) field;
                 } else {
-
+                    throw new OperationException();
                 }
             } catch (FieldNotFoundException e) {
                 Field field;

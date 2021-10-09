@@ -6,10 +6,7 @@ import lombok.Data;
 
 @Data
 @ApiModel("Запрос на добавление поля")
-public class AddFieldRequest {
-
-    @ApiModelProperty("Название датасета")
-    private String dataset;
+public class AddFieldRequest extends OperationRequest {
 
     @ApiModelProperty("Тип нового поля")
     private String newFieldType;
