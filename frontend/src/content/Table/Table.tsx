@@ -1,5 +1,4 @@
-import { Table, Button, Space, Input } from "antd";
-import SearchOutlined from "@ant-design/icons/SearchOutlined";
+import { Button, Space, Table } from "antd";
 import React from "react";
 import { getColumnSearchProps } from "./columnSearchProp";
 
@@ -31,9 +30,15 @@ const data = [
 ];
 
 export class MainTable extends React.Component {
-    state = {
-        filteredInfo: null,
-        sortedInfo: null,
+    state: { filteredInfo: any; sortedInfo: any } = {
+        filteredInfo: {
+            age: null,
+            name: null
+        },
+        sortedInfo: {
+            columnKey: null,
+            order: null
+        },
     };
 
     handleChange = (pagination: any, filters: any, sorter: any) => {
@@ -67,19 +72,16 @@ export class MainTable extends React.Component {
     render() {
         let { sortedInfo, filteredInfo } = this.state;
 
-        sortedInfo = sortedInfo || {};
-        filteredInfo = filteredInfo || {};
-
-        const columns = [
+        const columns: any = [
             {
                 title: "Name",
                 dataIndex: "name",
                 key: "name",
                 filters: [
-                    { text: "Joe", value: "Joe" },
-                    { text: "Jim", value: "Jim" },
+                    {text: "Joe", value: "Joe"},
+                    {text: "Jim", value: "Jim"},
                 ],
-                filteredValue: filteredInfo.name || null,
+                filteredValue: filteredInfo.name,
                 onFilter: (value: any, record: { name: string | any[] }) => record.name.includes(value),
                 sorter: (a: { name: string | any[] }, b: { name: string | any[] }) => a.name.length - b.name.length,
                 sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order,
@@ -90,7 +92,7 @@ export class MainTable extends React.Component {
                 dataIndex: "age",
                 key: "age",
                 ...getColumnSearchProps("age"),
-                filteredValue: filteredInfo.age || null,
+                filteredValue: filteredInfo.age,
                 sorter: (a: { age: number }, b: { age: number }) => a.age - b.age,
                 sortOrder: sortedInfo.columnKey === "age" && sortedInfo.order,
                 ellipsis: true,
@@ -100,10 +102,10 @@ export class MainTable extends React.Component {
                 dataIndex: "address",
                 key: "address",
                 filters: [
-                    { text: "London", value: "London" },
-                    { text: "New York", value: "New York" },
+                    {text: "London", value: "London"},
+                    {text: "New York", value: "New York"},
                 ],
-                filteredValue: filteredInfo.address || null,
+                filteredValue: filteredInfo.address,
                 onFilter: (value: any, record: { address: string | any[] }) => record.address.includes(value),
                 sorter: (a: { address: string | any[] }, b: { address: string | any[] }) =>
                     a.address.length - b.address.length,
