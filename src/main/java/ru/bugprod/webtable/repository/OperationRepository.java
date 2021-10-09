@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -33,7 +34,8 @@ public class OperationRepository {
     }
 
     public String exportOperations(String sessionKey) {
-        return data.get(sessionKey).stream().map(operation -> {
+        var list = Optional.ofNullable(data.get(sessionKey)).orElse(new ArrayList<>());
+        return list.stream().map(operation -> {
             try {
                 return mapper.writeValueAsString(operation);
             } catch (JsonProcessingException e) {
