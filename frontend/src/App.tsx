@@ -1,8 +1,6 @@
 import { Layout, Menu } from "antd";
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
-import { Filter } from "./content/Filter";
-import { LoginForm } from "./content/form/Form";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 import "antd/dist/antd.css";
 import "./App.css";
@@ -95,12 +93,6 @@ function App() {
                         <Menu.Item key="1" icon={<UserOutlined />}>
                             <Link to="/">Home</Link>
                         </Menu.Item>
-                        <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                            <Link to="/form">form</Link>
-                        </Menu.Item>
-                        <Menu.Item key="3" icon={<UploadOutlined />}>
-                            <Link to="/filter">filter</Link>
-                        </Menu.Item>
                     </Menu>
                 </Sider>
                 <Layout>
@@ -109,12 +101,6 @@ function App() {
                         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                             {/* <Table columns={columns} dataSource={data} onChange={onChange} /> */}
                             <MainTable />
-                            <Route path="/filter">
-                                <Filter />
-                            </Route>
-                            <Route path="/form">
-                                <LoginForm />
-                            </Route>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: "center" }}>© 2021</Footer>
