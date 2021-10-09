@@ -3,6 +3,7 @@ package ru.bugprod.webtable.usecase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.bugprod.webtable.controller.request.AddFieldRequest;
 import ru.bugprod.webtable.controller.request.JoinRequest;
 import ru.bugprod.webtable.model.data.DatasetMetadata;
 import ru.bugprod.webtable.model.data.Field;
@@ -21,12 +22,8 @@ public class OperationUseCase {
 
     public DatasetMetadata join(String sessionKey, JoinRequest request) {
         var metadata = repo.getAllMetadata(sessionKey);
-        var datasetTo = metadata.stream()
-                .filter(dataset -> dataset.getName().equals(request.getDataset()))
-                .findFirst().orElseThrow(OperationException::new);
-        var datasetFrom = metadata.stream()
-                .filter(dataset -> dataset.getName().equals(request.getJoinDataset()))
-                .findFirst().orElseThrow();
+        var datasetTo = getDataset(metadata, request.getDataset());
+        var datasetFrom = getDataset(metadata, request.getJoinDataset());
         var fieldTo = getField(datasetTo, request.getField());
         var fieldFrom = getField(datasetFrom, request.getJoinField());
 
@@ -35,6 +32,20 @@ public class OperationUseCase {
         }
         joinDatasets(datasetTo, datasetFrom);
         return datasetTo;
+    }
+
+    public DatasetMetadata addField(String sessionKey, AddFieldRequest request) {
+        var metadata = repo.getAllMetadata(sessionKey);
+        var dataset = getDataset(metadata, request.getDataset());
+        var newField = new Field(request.getNewFieldName(), request.getNewFieldType());
+        dataset.getFields().add(newField);
+        return dataset;
+    }
+
+    private DatasetMetadata getDataset(List<DatasetMetadata> datasets, String name) {
+        return datasets.stream()
+                .filter(dataset -> dataset.getName().equals(name))
+                .findFirst().orElseThrow(OperationException::new);
     }
 
     private Field getField(DatasetMetadata dataset, String fieldPath) {

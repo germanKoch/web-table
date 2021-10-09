@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import ru.bugprod.webtable.controller.request.AddFieldRequest;
 import ru.bugprod.webtable.controller.request.JoinRequest;
 import ru.bugprod.webtable.model.data.DatasetMetadata;
 import ru.bugprod.webtable.usecase.MetadataUseCase;
@@ -25,13 +26,19 @@ public class TableRestController {
 
     @ApiOperation(value = "Получение фрагмента датасета")
     @GetMapping("/get-all-metadata")
-    public List<DatasetMetadata> getFragment(@RequestHeader String sessionKey) {
+    public List<DatasetMetadata> getAllMetadata(@RequestHeader String sessionKey) {
         return useCase.getAllMetadata(sessionKey);
     }
 
     @ApiOperation(value = "Джоиним датасеты")
     @PostMapping("/join")
-    public DatasetMetadata getFragment(@RequestHeader String sessionKey, @RequestBody JoinRequest request) {
+    public DatasetMetadata joinDatasets(@RequestHeader String sessionKey, @RequestBody JoinRequest request) {
         return operationUseCase.join(sessionKey, request);
+    }
+
+    @ApiOperation(value = "Добавляем новое поле")
+    @PostMapping("/compute-field")
+    public DatasetMetadata addField(@RequestHeader String sessionKey, @RequestBody AddFieldRequest request) {
+        return operationUseCase.addField(sessionKey, request);
     }
 }
