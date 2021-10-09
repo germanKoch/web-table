@@ -18,6 +18,7 @@ import ru.bugprod.webtable.repository.entity.OperationType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -111,14 +112,15 @@ public class OperationUseCase {
     }
 
     private Field getFieldPlain(FieldContainer container, String fieldName) {
-        return container
+        List<Field> fields =  container
                 .getFields()
                 .stream()
                 .filter(fi -> fi.getName().equals(fieldName))
-                .findFirst()
-                .orElseThrow(() -> {
-                    throw new FieldNotFoundException();
-                });
+                .collect(Collectors.toList());
+        if (fields.size() >= 2) {
+            throw new OperationException();
+        }
+        return fields.get(0);
     }
 
 }

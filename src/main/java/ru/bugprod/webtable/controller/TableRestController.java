@@ -18,9 +18,9 @@ import ru.bugprod.webtable.usecase.OperationUseCase;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@RestController("/api")
 @Slf4j
+@RestController
+@RequiredArgsConstructor
 public class TableRestController {
 
     private final MetadataUseCase useCase;
