@@ -1,13 +1,12 @@
 import { Layout } from "antd";
 import { BrowserRouter as Router } from "react-router-dom";
 import logo from './img/logo.png'
-
+import {renderRoutes, routes} from "./routes";
 import "antd/dist/antd.css";
 import "./App.css";
-import { MainTable } from "./content/Table/Table";
-import { Graph } from "./content/Graph/Graph";
 
-const { Header, Content, Footer, Sider } = Layout;
+
+const { Header, Content, Footer } = Layout;
 
 const columns = [
     {
@@ -83,10 +82,7 @@ function App() {
                     <img src={logo} width={100} height={40} style={{padding: 5, marginLeft: 15 }} />
                 </Header>
                 <Content style={{margin: "24px 16px 0"}}>
-                    <div className="site-layout-background" style={{padding: 24, minHeight: 360 }}>
-                         <MainTable/>
-                        <Graph />
-                    </div>
+                    {renderRoutes(routes)}
                 </Content>
                 <Footer style={{textAlign: "center"}}>Багетный прод © 2021</Footer>
             </Layout>
