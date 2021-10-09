@@ -8,9 +8,12 @@ import ru.bugprod.webtable.controller.request.JoinRequest;
 import ru.bugprod.webtable.model.data.DatasetMetadata;
 import ru.bugprod.webtable.model.data.Field;
 import ru.bugprod.webtable.model.data.FieldContainer;
+import ru.bugprod.webtable.model.data.Struct;
+import ru.bugprod.webtable.model.exception.FieldNotFoundException;
 import ru.bugprod.webtable.model.exception.OperationException;
 import ru.bugprod.webtable.repository.MetadataRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -37,8 +40,7 @@ public class OperationUseCase {
     public DatasetMetadata addField(String sessionKey, AddFieldRequest request) {
         var metadata = repo.getAllMetadata(sessionKey);
         var dataset = getDataset(metadata, request.getDataset());
-        var newField = new Field(request.getNewFieldName(), request.getNewFieldType());
-        dataset.getFields().add(newField);
+        addNewField(dataset, request.getNewFieldName(), request.getNewFieldType());
         return dataset;
     }
 
@@ -53,15 +55,7 @@ public class OperationUseCase {
         FieldContainer fieldContainer = dataset;
 
         for (int i = 0; i < path.length; i++) {
-            String field = path[i];
-            Field foundField = fieldContainer
-                    .getFields()
-                    .stream()
-                    .filter(fi -> fi.getName().equals(field))
-                    .findFirst()
-                    .orElseThrow(() -> {
-                        throw new OperationException();
-                    });
+            Field foundField = getFieldPlain(fieldContainer, path[i]);
             if (i != path.length - 1) {
                 if (!(foundField instanceof FieldContainer)) {
                     throw new OperationException();
@@ -74,8 +68,45 @@ public class OperationUseCase {
         throw new OperationException();
     }
 
+    private void addNewField(DatasetMetadata dataset, String fieldPath, String fieldType) {
+        var path = fieldPath.split("\\.");
+        FieldContainer fieldContainer = dataset;
+
+        for (int i = 0; i < path.length; i++) {
+            try {
+                Field field = getFieldPlain(fieldContainer, path[i]);
+                if (field instanceof FieldContainer) {
+                    fieldContainer = (FieldContainer) field;
+                } else {
+
+                }
+            } catch (FieldNotFoundException e) {
+                Field field;
+                if (i == path.length - 1) {
+                    field = new Field(path[i], fieldType);
+                    fieldContainer.getFields().add(field);
+                } else {
+                    field = new Struct(path[i], "struct", new ArrayList<>());
+                    fieldContainer.getFields().add(field);
+                    fieldContainer = (FieldContainer) field;
+                }
+            }
+        }
+    }
+
     private void joinDatasets(DatasetMetadata to, DatasetMetadata from) {
         to.getFields().addAll(from.getFields());
+    }
+
+    private Field getFieldPlain(FieldContainer container, String fieldName) {
+        return container
+                .getFields()
+                .stream()
+                .filter(fi -> fi.getName().equals(fieldName))
+                .findFirst()
+                .orElseThrow(() -> {
+                    throw new FieldNotFoundException();
+                });
     }
 
 }
