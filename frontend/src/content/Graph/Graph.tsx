@@ -79,8 +79,15 @@ export class Graph extends React.Component {
 
     render() {
         return (
-            <div style={{ overflowY: "scroll", height: "65vh" }}>
-                <svg id="graph" style={{ height: "100vh", width: "100%", zIndex: 99999 }}></svg>;
+            <div
+                style={{
+                    overflowY: "auto",
+                    height: "57vh",
+                    boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+                    padding: "20px",
+                }}
+            >
+                <svg id="graph" style={{ height: "-webkit-fill-available", width: "100%", zIndex: 99999 }}></svg>;
             </div>
         );
     }

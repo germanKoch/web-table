@@ -74,11 +74,11 @@ export class Join extends React.Component {
 
     render() {
         return this.props.data ? (
-            <div style={{ width: "500px", marginBottom: "20px" }}>
+            <div style={{ width: "400px", marginBottom: "20px" }}>
                 <span>Выберите поле из первого датасета</span>
                 <TreeSelect
                     showSearch
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", marginBottom: "10px" }}
                     dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
                     placeholder="Please select"
                     allowClear
