@@ -17,6 +17,9 @@ public class ExportUseCase {
 
     public StreamHolder export(String sessionKey) {
         String opers = repo.exportOperations(sessionKey);
+        if (opers == null) {
+            opers = "{}";
+        }
         InputStream targetStream = new ByteArrayInputStream(opers.getBytes());
         return new StreamHolder(targetStream, "operations-" + LocalDate.now() + ".txt");
     }
