@@ -5,27 +5,27 @@ import { getColumnSearchProps } from "./columnSearchProp";
 const data = [
     {
         key: "1",
-        name: "John Brown",
+        name: "Item 1",
         age: 32,
-        address: "New York No. 1 Lake Park",
+        address: "Item",
     },
     {
         key: "2",
-        name: "Jim Green",
+        name: "Item 2",
         age: 42,
-        address: "London No. 1 Lake Park",
+        address: "Item",
     },
     {
         key: "3",
-        name: "Joe Black",
+        name: "Item 3",
         age: "32",
-        address: "Sidney No. 1 Lake Park",
+        address: "Item",
     },
     {
         key: "4",
-        name: "Jim Red",
+        name: "Item 4",
         age: 32,
-        address: "London No. 2 Lake Park",
+        address: "Item",
     },
 ];
 
@@ -54,7 +54,7 @@ export class MainTable extends React.Component {
         fetch("https://bugprod-webtable.herokuapp.com/get-all-metadata", {
             headers: {
                 'Content-Type': 'application/json',
-                'sessionKey': 'test'
+                'sessionKey': 'test1'
             },
         })
             .then((res: Response) => {
@@ -121,7 +121,7 @@ export class MainTable extends React.Component {
 
         const columns: any = [
             {
-                title: "Name",
+                title: "Item 1  ",
                 dataIndex: "name",
                 key: "name",
                 filters: [
@@ -135,7 +135,7 @@ export class MainTable extends React.Component {
                 ellipsis: true,
             },
             {
-                title: "Age",
+                title: "Item 2",
                 dataIndex: "age",
                 key: "age",
                 ...getColumnSearchProps("age"),
@@ -145,12 +145,12 @@ export class MainTable extends React.Component {
                 ellipsis: true,
             },
             {
-                title: "Address",
+                title: "Item 3",
                 dataIndex: "address",
                 key: "address",
                 filters: [
-                    {text: "London", value: "London"},
-                    {text: "New York", value: "New York"},
+                    {text: "Item", value: "London"},
+                    {text: "Item", value: "New York"},
                 ],
                 filteredValue: filteredInfo.address,
                 onFilter: (value: any, record: { address: string | any[] }) => record.address.includes(value),
@@ -163,7 +163,7 @@ export class MainTable extends React.Component {
         return (
             <React.Fragment>
                 <Space style={{marginBottom: 16}}>
-                    <Button onClick={this.setAgeSort}>Sort age</Button>
+                    <Button onClick={this.setAgeSort}>Sort item</Button>
                     <Button onClick={this.clearFilters}>Clear filters</Button>
                     <Button onClick={this.clearAll}>Clear filters and sorters</Button>
                 </Space>

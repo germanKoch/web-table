@@ -11,7 +11,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 const columns = [
     {
-        title: "Name",
+        title: "Item 1",
         dataIndex: "name",
     },
     {
@@ -23,16 +23,16 @@ const columns = [
         },
     },
     {
-        title: "Math Score",
-        dataIndex: "math",
+        title: "Item 2",
+        dataIndex: "Item 2",
         sorter: {
             compare: (a: { math: number }, b: { math: number }) => a.math - b.math,
             multiple: 2,
         },
     },
     {
-        title: "English Score",
-        dataIndex: "english",
+        title: "Item 3",
+        dataIndex: "Item 3",
         sorter: {
             compare: (a: { english: number }, b: { english: number }) => a.english - b.english,
             multiple: 1,
@@ -43,28 +43,28 @@ const columns = [
 const data = [
     {
         key: "1",
-        name: "John Brown",
+        name: "Item 1",
         chinese: 98,
         math: 60,
         english: 70,
     },
     {
         key: "2",
-        name: "Jim Green",
+        name: "Item 2",
         chinese: 98,
         math: 66,
         english: 89,
     },
     {
         key: "3",
-        name: "Joe Black",
+        name: "Item 3",
         chinese: 98,
         math: 90,
         english: 70,
     },
     {
         key: "4",
-        name: "Jim Red",
+        name: "Item 4",
         chinese: 88,
         math: 99,
         english: 89,
