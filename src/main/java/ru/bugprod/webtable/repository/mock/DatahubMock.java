@@ -101,7 +101,6 @@ public class DatahubMock {
                         new Field("deletion_reason", "string")
                 ), "record", "fct_users_deleted", "com.linkedin.dataset", "Sample users dataset"
         ));
-
         data.put("fct_users_deleted", new Sample("fct_users_deleted", getList(
                 new Row(getList(
                         new Value("user_name", "German Kochnev"),
@@ -159,7 +158,36 @@ public class DatahubMock {
                         new Field("supply_date", "date")
                 ), "record", "ProductsSample", "com.linkedin.dataset", "ProductsSample dataset"
         ));
+        data.put("ProductsSample", new Sample("ProductsSample", getList(
+                new Row(getList(
+                        new Value("name", "Мука"),
+                        new Value("price", 123),
+                        new Value("code", "112312"),
+                        new Value("market", Map.of("name", "Магнит2", "city", "Казань", "branch_code", "2004"))
 
+                )),
+                new Row(getList(
+                        new Value("name", "Масло"),
+                        new Value("price", 1231),
+                        new Value("code", "1123122"),
+                        new Value("market", Map.of("name", "Магнит", "city", "Москва", "branch_code", "2003"))
+
+                )),
+                new Row(getList(
+                        new Value("name", "Орех"),
+                        new Value("price", 1234),
+                        new Value("code", "1123123"),
+                        new Value("market", Map.of("name", "Магнит1", "city", "Питер", "branch_code", "2002"))
+
+                )),
+                new Row(getList(
+                        new Value("name", "Сыр"),
+                        new Value("price", 1232),
+                        new Value("code", "1123124"),
+                        new Value("market", Map.of("name", "Магнит", "city", "Новгород", "branch_code", "2001"))
+
+                ))
+        )));
 
         metadata.add(new DatasetMetadata(
                 getList(
