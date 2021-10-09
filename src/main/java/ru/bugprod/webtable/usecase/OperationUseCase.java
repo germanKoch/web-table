@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.bugprod.webtable.controller.request.AddFieldRequest;
+import ru.bugprod.webtable.controller.request.FilterRequest;
 import ru.bugprod.webtable.controller.request.JoinRequest;
 import ru.bugprod.webtable.model.data.DatasetMetadata;
 import ru.bugprod.webtable.model.data.Field;
@@ -19,6 +20,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+//TODO: сохранение
 public class OperationUseCase {
 
     private final MetadataRepository repo;
@@ -38,10 +40,15 @@ public class OperationUseCase {
     }
 
     public DatasetMetadata addField(String sessionKey, AddFieldRequest request) {
+        //TODO: валидация экспрэшина
         var metadata = repo.getAllMetadata(sessionKey);
         var dataset = getDataset(metadata, request.getDataset());
         addNewField(dataset, request.getNewFieldName(), request.getNewFieldType());
         return dataset;
+    }
+
+    public void filter(String sessionKey, FilterRequest request) {
+        //TODO: валидация экспрешина фильтрации
     }
 
     private DatasetMetadata getDataset(List<DatasetMetadata> datasets, String name) {
