@@ -4,8 +4,9 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 import { MainTable } from "./content/Table/Table";
+import { Graph } from "./content/Graph/Graph";
 
-const {Header, Content, Footer, Sider} = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 
 const columns = [
     {
@@ -77,14 +78,15 @@ function App() {
     return (
         <Router>
             <Layout>
-                <Header style={{padding: 0}}/>
-                <Content style={{margin: "24px 16px 0"}}>
-                    <div className="site-layout-background" style={{padding: 24, minHeight: 360}}>
+                <Header style={{ padding: 0 }} />
+                <Content style={{ margin: "24px 16px 0" }}>
+                    <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                         {/* <Table columns={columns} dataSource={data} onChange={onChange} /> */}
-                        <MainTable/>
+                        {/* <MainTable/> */}
+                        <Graph />
                     </div>
                 </Content>
-                <Footer style={{textAlign: "center"}}>© 2021</Footer>
+                <Footer style={{ textAlign: "center" }}>© 2021</Footer>
             </Layout>
         </Router>
     );
