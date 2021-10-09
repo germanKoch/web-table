@@ -74,7 +74,15 @@ export class Join extends React.Component {
 
     render() {
         return this.props.data ? (
-            <div style={{ width: "400px", marginBottom: "20px" }}>
+            <div
+                style={{
+                    width: "400px",
+                    marginBottom: "20px",
+                    boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+                    padding: "20px",
+                    background: "white",
+                }}
+            >
                 <span>Выберите поле из первого датасета</span>
                 <TreeSelect
                     showSearch
@@ -100,7 +108,7 @@ export class Join extends React.Component {
                     {this.renderTreeSelect(this.props.data)}
                 </TreeSelect>
                 <Button onClick={this.goJoinBro.bind(this)} style={{ marginTop: "20px" }}>
-                    Джойнимся
+                    Make Join
                 </Button>
             </div>
         ) : (

@@ -10,6 +10,10 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+main {
+    margin: 0 !important;
+}
+
 div::-webkit-scrollbar-track {
     background-color: #f5f5f5;
 }
@@ -20,7 +24,7 @@ div::-webkit-scrollbar {
 }
 
 div::-webkit-scrollbar-thumb {
-    background-color: #022d9a;
+    background-color: #89b5f7;
 }
 
 body::-webkit-scrollbar-track {
@@ -33,5 +37,17 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb {
-    background-color: #022d9a;
+    background-color: #89b5f7;
+}
+
+.ant-layout {
+    background: rgb(235, 243, 254) !important;
+}
+
+.ant-layout-header {
+    background: white !important;
+}
+
+.ant-layout-footer {
+    background: white !important;
 }

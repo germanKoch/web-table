@@ -1,8 +1,8 @@
-import { Button, Space, Table, Tree } from "antd";
+import { Button, Pagination, Space, Table, Tree } from "antd";
 import React from "react";
 import { MetaData } from "./model";
 
-const { TreeNode } = Tree
+const { TreeNode } = Tree;
 
 export class MainTable extends React.Component {
     state: { filteredInfo: any; sortedInfo: any; metadata: any } = {
@@ -13,18 +13,18 @@ export class MainTable extends React.Component {
             doc: null,
             fields: {
                 name: null,
-                type: null
-            }
+                type: null,
+            },
         },
         sortedInfo: {
             columnKey: null,
-            order: null
+            order: null,
         },
         metadata: {
             error: null,
             isLoaded: false,
-            items: []
-        }
+            items: [],
+        },
     };
 
     constructor(props: any) {
@@ -34,8 +34,8 @@ export class MainTable extends React.Component {
     componentDidMount() {
         fetch("https://bugprod-webtable.herokuapp.com/get-all-metadata", {
             headers: {
-                'Content-Type': 'application/json',
-                'sessionKey': 'test1'
+                "Content-Type": "application/json",
+                sessionKey: "test1",
             },
         })
             .then((res: Response) => {
@@ -43,21 +43,21 @@ export class MainTable extends React.Component {
             })
             .then(
                 (result: MetaData) => {
-                    console.log('result=>', result)
+                    console.log("result=>", result);
                     this.setState({
                         metadata: {
                             isLoaded: true,
-                            items: result
-                        }
+                            items: result,
+                        },
                     });
                 },
                 (error) => {
                     this.setState({
                         isLoaded: true,
-                        error
+                        error,
                     });
                 }
-            )
+            );
     }
 
     handleChange = (pagination: any, filters: any, sorter: any) => {
@@ -77,9 +77,9 @@ export class MainTable extends React.Component {
                 doc: null,
                 fields: {
                     name: null,
-                    type: null
-                }
-            }
+                    type: null,
+                },
+            },
         });
     };
 
@@ -92,12 +92,12 @@ export class MainTable extends React.Component {
                 doc: null,
                 fields: {
                     name: null,
-                    type: null
-                }
+                    type: null,
+                },
             },
             sortedInfo: {
                 columnKey: null,
-                order: null
+                order: null,
             },
         });
     };
@@ -111,38 +111,37 @@ export class MainTable extends React.Component {
         });
     };
 
-
     render() {
-        let {sortedInfo, filteredInfo} = this.state;
+        let { sortedInfo, filteredInfo } = this.state;
         const onSelect = (keys: any, info: any) => {
-            console.log('Trigger Select', keys, info);
+            console.log("Trigger Select", keys, info);
         };
 
         const onExpand = () => {
-            console.log('Trigger Expand');
+            console.log("Trigger Expand");
         };
 
-        const renderTreeNodes = (data:any) =>
+        const renderTreeNodes = (data: any) =>
             data.map((item: any, index: number) => {
-                console.log(item)
+                console.log(item);
                 if (item.fields) {
                     //console.log(item)
                     return (
                         <TreeNode title={item.name} key={index}>
                             {renderTreeNodes(item.fields)}
                         </TreeNode>
-                    )
+                    );
                 }
-                return <TreeNode title={item.name} key={index} {...item} />
-            })
+                return <TreeNode title={item.name} key={index} {...item} />;
+            });
         const columns: any = [
             {
                 title: "Item 1  ",
                 dataIndex: "name",
                 key: "name",
                 filters: [
-                    {text: "Joe", value: "Joe"},
-                    {text: "Jim", value: "Jim"},
+                    { text: "Joe", value: "Joe" },
+                    { text: "Jim", value: "Jim" },
                 ],
                 filteredValue: filteredInfo.name,
                 onFilter: (value: any, record: { name: string | any[] }) => record.name.includes(value),
@@ -157,7 +156,8 @@ export class MainTable extends React.Component {
                 filters: null,
                 filteredValue: filteredInfo.namespace,
                 onFilter: (value: any, record: { namespace: string | any[] }) => record.namespace.includes(value),
-                sorter: (a: { namespace: string | any[] }, b: { namespace: string | any[] }) => a.namespace.length - b.namespace.length,
+                sorter: (a: { namespace: string | any[] }, b: { namespace: string | any[] }) =>
+                    a.namespace.length - b.namespace.length,
                 sortOrder: sortedInfo.columnKey === "namespace" && sortedInfo.order,
                 ellipsis: true,
             },
@@ -191,9 +191,7 @@ export class MainTable extends React.Component {
                 render: (fields: any) => {
                     return (
                         <React.Fragment>
-                            <Tree>
-                                {renderTreeNodes(fields)}
-                            </Tree>
+                            <Tree>{renderTreeNodes(fields)}</Tree>
                         </React.Fragment>
                     );
                 },
@@ -201,12 +199,22 @@ export class MainTable extends React.Component {
         ];
         return (
             <React.Fragment>
-                <Space style={{marginBottom: 16}}>
+                <Space style={{ marginBottom: 16 }}>
                     <Button onClick={this.setAgeSort}>Sort item</Button>
                     <Button onClick={this.clearFilters}>Clear filters</Button>
                     <Button onClick={this.clearAll}>Clear filters and sorters</Button>
                 </Space>
-                <Table columns={columns} dataSource={this.state.metadata.items} onChange={this.handleChange}/>
+                <div style={{ height: "65vh", overflowY: "scroll" }}>
+                    <Table
+                        columns={columns}
+                        dataSource={this.state.metadata.items}
+                        onChange={this.handleChange}
+                        pagination={{ position: ["none", "none"] }}
+                    />
+                </div>
+                <div style={{ background: "#ffffff", display: "flex", justifyContent: "right", padding: "20px" }}>
+                    <Pagination defaultCurrent={1} total={50} />
+                </div>
             </React.Fragment>
         );
     }
