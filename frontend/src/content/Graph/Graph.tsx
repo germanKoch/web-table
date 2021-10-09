@@ -1,24 +1,6 @@
 import React from "react";
 import * as d3 from "d3";
-import { getRandomColor } from "./utils/randomColor";
-
 export class Graph extends React.Component {
-    state: { filteredInfo: any; sortedInfo: any; metadata: any } = {
-        filteredInfo: {
-            age: null,
-            name: null,
-        },
-        sortedInfo: {
-            columnKey: null,
-            order: null,
-        },
-        metadata: {
-            error: null,
-            isLoaded: false,
-            items: [],
-        },
-    };
-
     tree(data, width) {
         const root = d3.hierarchy(data);
         root.dx = 10;
@@ -91,61 +73,15 @@ export class Graph extends React.Component {
     }
 
     componentDidUpdate() {
-        this.RenderGraph(this.data);
-    }
-    componentDidMount() {
-        fetch("https://bugprod-webtable.herokuapp.com/get-all-metadata", {
-            headers: {
-                "Content-Type": "application/json",
-                sessionKey: "test",
-            },
-        })
-            .then((res: Response) => {
-                return res.json();
-            })
-            .then(
-                (result) => {
-                    console.log("result=>", result);
-
-                    this.data = {
-                        name: "main",
-                        children: [...result.map((r) => this.getChilds(r))],
-                    };
-
-                    this.setState({
-                        isLoaded: true,
-                        items: result,
-                    });
-                    this.RenderGraph(this.data);
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error,
-                    });
-                }
-            );
-    }
-
-    getChilds(graph) {
-        return {
-            name: graph.name,
-            children: graph.fields.map((g) => {
-                if (g?.fields?.length > 0) {
-                    return {
-                        name: g?.name,
-                        children: this.getChilds(g),
-                    };
-                } else {
-                    return {
-                        name: g?.name,
-                    };
-                }
-            }),
-        };
+        d3.select("#graph").selectAll("*").remove();
+        this.RenderGraph(this.props.data);
     }
 
     render() {
-        return <svg id="graph" style={{ height: "100vh", width: "100vw" }}></svg>;
+        return (
+            <div style={{ overflowY: "scroll", height: "65vh" }}>
+                <svg id="graph" style={{ height: "100vh", width: "100%", zIndex: 99999 }}></svg>;
+            </div>
+        );
     }
 }
