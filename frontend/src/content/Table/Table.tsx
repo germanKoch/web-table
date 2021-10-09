@@ -1,6 +1,7 @@
 import { Button, Space, Table, Tree } from "antd";
 import React from "react";
 import { MetaData } from "./model";
+
 const { TreeNode } = Tree
 
 export class MainTable extends React.Component {
@@ -123,15 +124,16 @@ export class MainTable extends React.Component {
 
         const renderTreeNodes = (data:any) =>
             data.map((item: any, index: number) => {
+                console.log(item)
                 if (item.fields) {
-                    console.log(item)
+                    //console.log(item)
                     return (
-                        <TreeNode title={item.name} isLeaf={item.fields.length == 0} key={index}>
+                        <TreeNode title={item.name} key={index}>
                             {renderTreeNodes(item.fields)}
                         </TreeNode>
                     )
                 }
-                return <TreeNode key={item.key} {...item} />
+                return <TreeNode title={item.name} key={index} {...item} />
             })
         const columns: any = [
             {
