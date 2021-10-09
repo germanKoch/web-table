@@ -60,7 +60,7 @@ export class MainTable extends React.Component {
                     console.log('result=>', result)
                     this.setState({
                         isLoaded: true,
-                        items: result.items
+                        items: result
                     });
                 },
                 (error) => {
