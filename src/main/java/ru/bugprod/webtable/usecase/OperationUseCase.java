@@ -16,6 +16,7 @@ import ru.bugprod.webtable.repository.MetadataRepository;
 import ru.bugprod.webtable.repository.OperationRepository;
 import ru.bugprod.webtable.repository.entity.OperationType;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,12 @@ public class OperationUseCase {
         var datasetFrom = getDataset(metadata, request.getJoinDataset());
         var fieldTo = getField(datasetTo, request.getField());
         var fieldFrom = getField(datasetFrom, request.getJoinField());
+        try {
+            getField(datasetTo, request.getJoinField());
+            throw new RuntimeException();
+        } catch (OperationException | FieldNotFoundException e) {
+            //ignore
+        }
         if (!fieldTo.getType().equals(fieldFrom.getType())) {
             throw new OperationException();
         }
@@ -117,7 +124,7 @@ public class OperationUseCase {
                 .stream()
                 .filter(fi -> fi.getName().equals(fieldName))
                 .collect(Collectors.toList());
-        if (fields.size() >= 2) {
+        if (fields.size() != 1) {
             throw new OperationException();
         }
         return fields.get(0);
