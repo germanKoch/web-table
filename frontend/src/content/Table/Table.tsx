@@ -1,39 +1,19 @@
 import { Button, Space, Table } from "antd";
 import React from "react";
-import { getColumnSearchProps } from "./columnSearchProp";
+import { MetaData } from "./model";
 
-const data = [
-    {
-        key: "1",
-        name: "Item 1",
-        age: 32,
-        address: "Item",
-    },
-    {
-        key: "2",
-        name: "Item 2",
-        age: 42,
-        address: "Item",
-    },
-    {
-        key: "3",
-        name: "Item 3",
-        age: "32",
-        address: "Item",
-    },
-    {
-        key: "4",
-        name: "Item 4",
-        age: 32,
-        address: "Item",
-    },
-];
 
 export class MainTable extends React.Component {
     state: { filteredInfo: any; sortedInfo: any; metadata: any } = {
         filteredInfo: {
-            age: null,
-            name: null
+            type: null,
+            name: null,
+            namespace: null,
+            doc: null,
+            fields: {
+                name: null,
+                type: null
+            }
         },
         sortedInfo: {
             columnKey: null,
@@ -61,11 +41,13 @@ export class MainTable extends React.Component {
                 return res.json();
             })
             .then(
-                (result) => {
+                (result: MetaData) => {
                     console.log('result=>', result)
                     this.setState({
-                        isLoaded: true,
-                        items: result
+                        metadata: {
+                            isLoaded: true,
+                            items: result
+                        }
                     });
                 },
                 (error) => {
@@ -88,8 +70,14 @@ export class MainTable extends React.Component {
     clearFilters = () => {
         this.setState({
             filteredInfo: {
-                age: null,
-                name: null
+                type: null,
+                name: null,
+                namespace: null,
+                doc: null,
+                fields: {
+                    name: null,
+                    type: null
+                }
             }
         });
     };
@@ -97,8 +85,14 @@ export class MainTable extends React.Component {
     clearAll = () => {
         this.setState({
             filteredInfo: {
-                age: null,
-                name: null
+                type: null,
+                name: null,
+                namespace: null,
+                doc: null,
+                fields: {
+                    name: null,
+                    type: null
+                }
             },
             sortedInfo: {
                 columnKey: null,
@@ -135,29 +129,47 @@ export class MainTable extends React.Component {
                 ellipsis: true,
             },
             {
-                title: "Item 2",
-                dataIndex: "age",
-                key: "age",
-                ...getColumnSearchProps("age"),
-                filteredValue: filteredInfo.age,
-                sorter: (a: { age: number }, b: { age: number }) => a.age - b.age,
-                sortOrder: sortedInfo.columnKey === "age" && sortedInfo.order,
+                title: "Namespace",
+                dataIndex: "namespace",
+                key: "namespace",
+                filters: null,
+                filteredValue: filteredInfo.namespace,
+                onFilter: (value: any, record: { namespace: string | any[] }) => record.namespace.includes(value),
+                sorter: (a: { namespace: string | any[] }, b: { namespace: string | any[] }) => a.namespace.length - b.namespace.length,
+                sortOrder: sortedInfo.columnKey === "namespace" && sortedInfo.order,
                 ellipsis: true,
             },
             {
-                title: "Item 3",
-                dataIndex: "address",
-                key: "address",
-                filters: [
-                    {text: "Item", value: "London"},
-                    {text: "Item", value: "New York"},
-                ],
-                filteredValue: filteredInfo.address,
-                onFilter: (value: any, record: { address: string | any[] }) => record.address.includes(value),
-                sorter: (a: { address: string | any[] }, b: { address: string | any[] }) =>
-                    a.address.length - b.address.length,
-                sortOrder: sortedInfo.columnKey === "address" && sortedInfo.order,
+                title: "Type",
+                dataIndex: "type",
+                key: "type",
+                filters: null,
+                filteredValue: filteredInfo.type,
+                onFilter: (value: any, record: { type: string | any[] }) => record.type.includes(value),
+                sorter: (a: { type: string | any[] }, b: { type: string | any[] }) => a.type.length - b.type.length,
+                sortOrder: sortedInfo.columnKey === "type" && sortedInfo.order,
                 ellipsis: true,
+            },
+            {
+                title: "Doc",
+                dataIndex: "doc",
+                key: "doc",
+                filters: null,
+                filteredValue: filteredInfo.doc,
+                onFilter: (value: any, record: { doc: string | any[] }) => record.doc.includes(value),
+                sorter: (a: { doc: string | any[] }, b: { doc: string | any[] }) => a.doc.length - b.doc.length,
+                sortOrder: sortedInfo.columnKey === "doc" && sortedInfo.order,
+                ellipsis: true,
+            },
+            {
+                title: "fields",
+                dataIndex: "fields['name']",
+                key: "fields['name']",
+                ellipsis: true,
+                render: (fields: any) => {
+                    console.log(fields)
+                    return fields;
+                }
             },
         ];
         return (
@@ -167,7 +179,7 @@ export class MainTable extends React.Component {
                     <Button onClick={this.clearFilters}>Clear filters</Button>
                     <Button onClick={this.clearAll}>Clear filters and sorters</Button>
                 </Space>
-                <Table columns={columns} dataSource={data} onChange={this.handleChange}/>
+                <Table columns={columns} dataSource={this.state.metadata.items} onChange={this.handleChange}/>
             </React.Fragment>
         );
     }
