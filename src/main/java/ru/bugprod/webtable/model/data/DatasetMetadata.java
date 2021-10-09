@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @ApiModel(value = "TableMetadata", description = "Метадата датасета")
-public class TableMetadata {
+public class DatasetMetadata implements FieldContainer {
     @ApiModelProperty("Поля таблицы")
     private final List<Field> fields;
     @ApiModelProperty("Тип")
