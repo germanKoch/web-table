@@ -1,4 +1,4 @@
-package ru.bugprod.webtable.model.data;
+package ru.bugprod.webtable.model.metadata;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

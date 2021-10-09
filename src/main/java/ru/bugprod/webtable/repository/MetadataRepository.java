@@ -1,7 +1,7 @@
 package ru.bugprod.webtable.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.bugprod.webtable.model.data.DatasetMetadata;
+import ru.bugprod.webtable.model.metadata.DatasetMetadata;
 import ru.bugprod.webtable.repository.mock.DatahubMock;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class MetadataRepository {
     }
 
     private void fillIfEmpty(String sessionKey) {
-        sessions.computeIfAbsent(sessionKey, k -> data.getData());
+        sessions.computeIfAbsent(sessionKey, k -> data.getMetadata());
     }
 
 }

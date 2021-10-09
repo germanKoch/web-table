@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugprod.webtable.controller.request.AddFieldRequest;
 import ru.bugprod.webtable.controller.request.FilterRequest;
 import ru.bugprod.webtable.controller.request.JoinRequest;
-import ru.bugprod.webtable.model.data.DatasetMetadata;
+import ru.bugprod.webtable.model.metadata.DatasetMetadata;
 import ru.bugprod.webtable.usecase.MetadataUseCase;
 import ru.bugprod.webtable.usecase.OperationUseCase;
 
