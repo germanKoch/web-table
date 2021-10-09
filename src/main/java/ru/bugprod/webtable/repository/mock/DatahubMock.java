@@ -9,6 +9,7 @@ import ru.bugprod.webtable.model.metadata.DatasetMetadata;
 import ru.bugprod.webtable.model.metadata.Field;
 import ru.bugprod.webtable.model.metadata.Struct;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,19 +74,19 @@ public class DatahubMock {
         data.put("SampleHdfsDataset", new Sample("SampleHdfsDataset", getList(
                 new Row(getList(
                         new Value("shipment_info", Map.of("date", LocalDate.now(), "target", "test1", "destination", "city1")),
-                        new Value("route_data",  Map.of("lat", 1001, "lng", 2001))
+                        new Value("route_data", Map.of("lat", 1001, "lng", 2001))
                 )),
                 new Row(getList(
-                        new Value("shipment_info",  Map.of("date", LocalDate.now(), "target", "test2", "destination", "city3")),
-                        new Value("route_data",  Map.of("lat", 1002, "lng", 2002))
+                        new Value("shipment_info", Map.of("date", LocalDate.now(), "target", "test2", "destination", "city3")),
+                        new Value("route_data", Map.of("lat", 1002, "lng", 2002))
                 )),
                 new Row(getList(
-                        new Value("shipment_info",  Map.of("date", LocalDate.now(), "target", "test3", "destination", "city4")),
-                        new Value("route_data",  Map.of("lat", 1003, "lng", 2003))
+                        new Value("shipment_info", Map.of("date", LocalDate.now(), "target", "test3", "destination", "city4")),
+                        new Value("route_data", Map.of("lat", 1003, "lng", 2003))
                 )),
                 new Row(getList(
-                        new Value("shipment_info",  Map.of("date", LocalDate.now(), "target", "test1", "destination", "city1")),
-                        new Value("route_data",  Map.of("lat", 1004, "lng", 2004))
+                        new Value("shipment_info", Map.of("date", LocalDate.now(), "target", "test1", "destination", "city1")),
+                        new Value("route_data", Map.of("lat", 1004, "lng", 2004))
                 ))
         )));
 
@@ -100,6 +101,45 @@ public class DatahubMock {
                         new Field("deletion_reason", "string")
                 ), "record", "fct_users_deleted", "com.linkedin.dataset", "Sample users dataset"
         ));
+
+        data.put("fct_users_deleted", new Sample("fct_users_deleted", getList(
+                new Row(getList(
+                        new Value("user_name", "German Kochnev"),
+                        new Value("timestamp", Instant.now().getEpochSecond()),
+                        new Value("user_id", "1"),
+                        new Value("browser_id", "бразуер1"),
+                        new Value("session_id", "айдишник1"),
+                        new Value("deletion_reason", "Прост1")
+
+                )),
+                new Row(getList(
+                        new Value("user_name", "Borzunov Igor"),
+                        new Value("timestamp", Instant.now().getEpochSecond()),
+                        new Value("user_id", "1"),
+                        new Value("browser_id", "бразуер2"),
+                        new Value("session_id", "айдишник2"),
+                        new Value("deletion_reason", "Прост2")
+
+                )),
+                new Row(getList(
+                        new Value("user_name", "Gareev Arslan"),
+                        new Value("timestamp", Instant.now().getEpochSecond()),
+                        new Value("user_id", "1"),
+                        new Value("browser_id", "бразуер3"),
+                        new Value("session_id", "айдишник3"),
+                        new Value("deletion_reason", "Прост3")
+
+                )),
+                new Row(getList(
+                        new Value("user_name", "Yakunin Arakdii"),
+                        new Value("timestamp", Instant.now().getEpochSecond()),
+                        new Value("user_id", "1"),
+                        new Value("browser_id", "бразуер4"),
+                        new Value("session_id", "айдишник4"),
+                        new Value("deletion_reason", "Прост4")
+
+                ))
+        )));
 
 
         metadata.add(new DatasetMetadata(
