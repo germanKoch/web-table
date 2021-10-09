@@ -3,12 +3,14 @@ package ru.bugprod.webtable.controller;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import ru.bugprod.webtable.controller.request.AddFieldRequest;
 import ru.bugprod.webtable.controller.request.FilterRequest;
 import ru.bugprod.webtable.controller.request.JoinRequest;
@@ -36,8 +38,13 @@ public class TableRestController {
 
     @ApiOperation(value = "Джоиним датасеты")
     @PostMapping("/join")
-    public DatasetMetadata joinDatasets(@RequestHeader String sessionKey, @RequestBody JoinRequest request) {
-        return operationUseCase.join(sessionKey, request);
+    public ResponseEntity<DatasetMetadata> joinDatasets(@RequestHeader String sessionKey, @RequestBody JoinRequest request) {
+        try {
+            var metadata = operationUseCase.join(sessionKey, request);
+            return ResponseEntity.ok(metadata);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @ApiOperation(value = "Добавляем новое поле")
