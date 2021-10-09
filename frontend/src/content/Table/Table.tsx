@@ -51,7 +51,12 @@ export class MainTable extends React.Component {
     }
 
     componentDidMount() {
-        fetch("https://bugprod-webtable.herokuapp.com/get-all-metadata")
+        fetch("https://bugprod-webtable.herokuapp.com/get-all-metadata", {
+            headers: {
+                'Content-Type': 'application/json',
+                'sessionKey': 'test'
+            },
+        })
             .then((res: Response) => {
                 return res.json();
             })
