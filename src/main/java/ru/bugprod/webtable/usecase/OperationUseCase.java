@@ -125,11 +125,15 @@ public class OperationUseCase {
     }
 
     private Field getFieldPlain(FieldContainer container, String fieldName) {
-        return container.getFields()
+        List<Field> fields = container
+                .getFields()
                 .stream()
                 .filter(fi -> fi.getName().equals(fieldName))
-                .collect(Collectors.toList())
-                .stream().findFirst().orElseThrow(FieldNotFoundException::new);
+                .collect(Collectors.toList());
+        if (fields.size() != 1) {
+            throw new FieldNotFoundException();
+        }
+        return fields.get(0);
     }
 
 }

@@ -41,6 +41,6 @@ public class OperationRepository {
             } catch (JsonProcessingException e) {
                 throw new ExportException(e);
             }
-        }).collect(Collectors.joining("\n"));
+        }).collect(Collectors.joining(","));
     }
 }
