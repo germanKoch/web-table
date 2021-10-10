@@ -136,12 +136,12 @@ export class MainTable extends React.Component {
             });
         const columns: any = [
             {
-                title: "Item 1  ",
+                title: "Items",
                 dataIndex: "name",
                 key: "name",
                 filters: [
-                    { text: "Joe", value: "Joe" },
-                    { text: "Jim", value: "Jim" },
+                    { text: "По сэмплам", value: "Sample" },
+                    { text: "По юзерам", value: "users" },
                 ],
                 filteredValue: filteredInfo.name,
                 onFilter: (value: any, record: { name: string | any[] }) => record.name.includes(value),
@@ -200,11 +200,11 @@ export class MainTable extends React.Component {
         return (
             <React.Fragment>
                 <Space style={{ marginBottom: 16 }}>
-                    <Button onClick={this.setAgeSort}>Sort item</Button>
-                    <Button onClick={this.clearFilters}>Clear filters</Button>
-                    <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+                    {/*<Button onClick={this.setAgeSort}>Sort item</Button>*/}
+                    {/*<Button onClick={this.clearFilters}>Clear filters</Button>*/}
+                    {/*<Button onClick={this.clearAll}>Clear filters and sorters</Button>*/}
                 </Space>
-                <div style={{ height: "65vh", overflowY: "scroll" }}>
+                <div style={{ height: "70vh", overflowY: "scroll" }}>
                     <Table
                         columns={columns}
                         dataSource={this.state.metadata.items}

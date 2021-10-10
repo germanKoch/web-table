@@ -31,10 +31,11 @@ const LoginForm = () => {
             // @ts-ignore
             onSubmit={onSubmit}
             name="basic"
-            labelCol={{span: 5}}
-            wrapperCol={{span: 5}}
+            labelCol={{span: 8}}
+            wrapperCol={{span: 8}}
             initialValues={{remember: true}}
             autoComplete="off"
+            style={{ padding: 300, minHeight: 300 }}
         >
             <Form.Item
                 label="Username"
@@ -71,10 +72,10 @@ const LoginForm = () => {
                     })}
                 </div>
             </Form.Item>
-            <Form.Item name="remember" valuePropName="checked" wrapperCol={{offset: 5, span: 5}}>
+            <Form.Item name="remember" valuePropName="checked" wrapperCol={{offset: 8, span: 8}} >
                 <Checkbox>Remember me</Checkbox>
             </Form.Item>
-            <Form.Item wrapperCol={{offset: 5, span: 5}}>
+            <Form.Item wrapperCol={{offset: 11, span: 11}}>
                 <Button
                     disabled={!eachValid || pending}
                     // @ts-ignore
