@@ -179,9 +179,10 @@ export class Graph extends React.Component {
             <div
                 style={{
                     overflowY: "auto",
-                    height: "56vh",
+                    height: "80vh",
                     boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
                     padding: "20px",
+                    width: "100%",
                     background: "white",
                 }}
             >

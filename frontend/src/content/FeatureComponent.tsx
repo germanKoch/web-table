@@ -73,17 +73,26 @@ const FeatureComponent = () => {
     }, []);
 
     return (
-        <Row className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-            <Col xl={24}>
-                <div style={{ display: "flex", alignItems: "end", marginBottom: "20px" }}>
-                    <Join onJoin={(e) => fetchData()} data={state.data} />
-                    <Button type="primary" style={{ marginLeft: "20px" }} onClick={downloadData}>
-                        Выгрузить
-                    </Button>
-                </div>
-
-                <Graph onUpdate={(e) => fetchData()} data={state.data} />
-            </Col>
+        <Row
+            className="site-layout-background"
+            style={{
+                padding: 24,
+                minHeight: 360,
+                display: "flex",
+                width: "100%",
+                height: "85vh",
+                justifyContent: "space-between",
+            }}
+        >
+            <div>
+                <Join onJoin={(e) => fetchData()} data={state.data} />
+                <Button type="primary" style={{ marginTop: "20px" }} onClick={downloadData}>
+                    Выгрузить
+                </Button>
+            </div>
+            <div style={{ height: "85vh", width: "77%" }}>
+                <Graph style={{ width: "50vw", height: "85vh" }} onUpdate={(e) => fetchData()} data={state.data} />
+            </div>
         </Row>
     );
 };
