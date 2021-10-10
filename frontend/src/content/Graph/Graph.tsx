@@ -89,6 +89,13 @@ export class Graph extends React.Component {
 
     onClick(e: MouseEvent) {
         const input = document.createElement("input");
+        const inputExpression = document.createElement("input");
+
+        let fieldName = "";
+        let expressionValue = "";
+
+        input.setAttribute("placeholder", "Введите название структуры или поля");
+        inputExpression.setAttribute("placeholder", "Введите условие");
 
         const id = e.target.dataset.id.split(".");
         const dataset = id[id.length - 3];
@@ -101,19 +108,31 @@ export class Graph extends React.Component {
             ),
         ].join(".");
 
+        inputExpression.style.position = "absolute";
+        inputExpression.style.left = e.pageX + "px";
+        inputExpression.style.top = e.pageY + 30 + "px";
+        inputExpression.addEventListener("keypress", (e) => {
+            expressionValue = e.target.value;
+            if (e.keyCode == 13) {
+                this.addNewField.call(this, fieldName, dataset, field, input, inputExpression, expressionValue);
+            }
+        });
+
         input.style.position = "absolute";
         input.style.left = e.pageX + "px";
         input.style.top = e.pageY + "px";
         input.addEventListener("keypress", (e) => {
+            fieldName = e.target.value;
             if (e.keyCode == 13) {
-                this.addNewField.call(this, e.target.value, dataset, field, e.target);
+                this.addNewField.call(this, fieldName, dataset, field, input, inputExpression, expressionValue);
             }
         });
 
         document.body.appendChild(input);
+        document.body.appendChild(inputExpression);
     }
 
-    addNewField(fieldTitle, dataset, field, node) {
+    addNewField(fieldTitle, dataset, field, inputNode, expresionNode, expression = "expression") {
         fetch("https://bugprod-webtable.herokuapp.com/compute-field", {
             headers: {
                 "Content-Type": "application/json",
@@ -122,7 +141,7 @@ export class Graph extends React.Component {
             method: "POST",
             body: JSON.stringify({
                 dataset: dataset,
-                expression: "expression",
+                expression: expression,
                 newFieldName: `${field}.${fieldTitle}`,
                 newFieldType: "string",
             }),
@@ -132,7 +151,8 @@ export class Graph extends React.Component {
             })
             .then(
                 (result) => {
-                    node.remove();
+                    inputNode.remove();
+                    expresionNode.remove();
                     this.props.onUpdate();
                     console.log("result=>", result);
                 },
