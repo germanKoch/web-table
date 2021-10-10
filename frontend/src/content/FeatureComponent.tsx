@@ -82,7 +82,7 @@ const FeatureComponent = () => {
                     </Button>
                 </div>
 
-                <Graph data={state.data} />
+                <Graph onUpdate={(e) => fetchData()} data={state.data} />
             </Col>
         </Row>
     );

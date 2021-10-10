@@ -52,20 +52,97 @@ export class Graph extends React.Component {
             .data(root.descendants())
             .join("g")
             .attr("transform", (d) => `translate(${d.y},${d.x})`);
-
+        console.log(node);
         node.append("circle")
             .attr("fill", (d) => (d.children ? "#555" : "#999"))
             .attr("r", 2.5);
 
         node.append("text")
+            .attr("data-id", (d) => {
+                return `${d.data.name}.${this.getId(d)}`;
+            })
             .attr("dy", "0.31em")
             .attr("x", (d) => (d.children ? -6 : 6))
             .attr("text-anchor", (d) => (d.children ? "end" : "start"))
             .text((d) => d.data.name)
+            .on("mouseover", this.onOver)
+            .on("mouseleave", this.onLeave)
+            .on("click", this.onClick.bind(this))
             .clone(true)
             .lower()
             .attr("stroke", "white");
         return svg.node();
+    }
+
+    getId(node) {
+        return node?.parent ? `${node.parent.data.name}.${this.getId(node.parent)}` : "";
+    }
+
+    onOver(e: MouseEvent) {
+        e.target.style.fill = "#89b5f7";
+        e.target.style.cursor = "pointer";
+    }
+
+    onLeave(e: MouseEvent) {
+        e.target.style.fill = "black";
+    }
+
+    onClick(e: MouseEvent) {
+        const input = document.createElement("input");
+
+        const id = e.target.dataset.id.split(".");
+        const dataset = id[id.length - 3];
+        const field = [
+            ...new Set(
+                id
+                    .slice(0, -3)
+                    .filter((i) => i !== dataset)
+                    .reverse()
+            ),
+        ].join(".");
+
+        input.style.position = "absolute";
+        input.style.left = e.pageX + "px";
+        input.style.top = e.pageY + "px";
+        input.addEventListener("keypress", (e) => {
+            if (e.keyCode == 13) {
+                this.addNewField.call(this, e.target.value, dataset, field, e.target);
+            }
+        });
+
+        document.body.appendChild(input);
+    }
+
+    addNewField(fieldTitle, dataset, field, node) {
+        fetch("https://bugprod-webtable.herokuapp.com/compute-field", {
+            headers: {
+                "Content-Type": "application/json",
+                sessionKey: "test",
+            },
+            method: "POST",
+            body: JSON.stringify({
+                dataset: dataset,
+                expression: "expression",
+                newFieldName: `${field}.${fieldTitle}`,
+                newFieldType: "string",
+            }),
+        })
+            .then((res: Response) => {
+                return res.json();
+            })
+            .then(
+                (result) => {
+                    node.remove();
+                    this.props.onUpdate();
+                    console.log("result=>", result);
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error,
+                    });
+                }
+            );
     }
 
     constructor(props: any) {
@@ -88,7 +165,7 @@ export class Graph extends React.Component {
                     background: "white",
                 }}
             >
-                <svg id="graph" style={{ height: "-webkit-fill-available", width: "100%", zIndex: 99999 }}></svg>;
+                <svg id="graph" style={{ height: "200vh", width: "100%", zIndex: 99999 }}></svg>;
             </div>
         );
     }

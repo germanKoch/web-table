@@ -57,8 +57,6 @@ export class Join extends React.Component {
             );
     }
 
-    // onJoin() {}
-
     renderTreeSelect(node, prevNodeName = "") {
         return node?.children?.map((ch) => {
             const value = ch.name;
