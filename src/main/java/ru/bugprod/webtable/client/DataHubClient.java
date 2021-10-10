@@ -31,7 +31,6 @@ public class DataHubClient {
         return Jsoup.connect(graphqlUrl)
                 .method(Connection.Method.POST)
                 .header("Content-Type", "application/json;charset=UTF-8")
-                .ignoreContentType(true)
                 .cookies(cookies)
                 .requestBody(graphql)
                 .execute()

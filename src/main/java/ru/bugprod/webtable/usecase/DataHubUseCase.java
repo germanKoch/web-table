@@ -18,25 +18,22 @@ public class DataHubUseCase {
     private final String username = "datahub";
     private final String password = "datahub";
 
-    private final String testData = "{search(input: {type: DATASET, query: \"a\", start: 0, count: 1000}) {\n" +
+    private final String testData = "{\n" +
+            "  search(input:{type: DATASET, query: \"a\", start:0, count: 10 }){\n" +
             "    start\n" +
             "    count\n" +
             "    total\n" +
-            "    searchResults {\n" +
-            "      entity {\n" +
-            "        urn\n" +
-            "        type\n" +
-            "        ... on Dataset {\n" +
-            "          properties{\n" +
-            "            description\n" +
-            "            externalUrl\n" +
-            "          }\n" +
-            "          name\n" +
-            "          urn\n" +
-            "        }\n" +
+            "    searchResults{\n" +
+            "    entity{\n" +
+            "      urn\n" +
+            "      type\n" +
+            "      ...on Dataset {\n" +
+            "        name\n" +
             "      }\n" +
             "    }\n" +
-            "  }}";
+            "  }\n" +
+            "  }\n" +
+            "}";
     private static Map<String, String> dataHubClientCookies;
 
     @PostConstruct
